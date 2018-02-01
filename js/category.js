@@ -45,7 +45,7 @@ function Category(title = "Anon") {
     });
 
     Category.prototype.toString = function () {
-        return "Title: " +this.title;
+        return "Title: " + this.title + " Description: " + this.description ;
     }
     
 

@@ -7,7 +7,6 @@ function testERP() {
     var storeHouse = StoreHouse.getInstance();
     StoreHouse.wHouse = "El Almacen 13";
     
-
     console.log("-----Iniciando testeo------");
     console.log("....Creando PRODUCTOS....");
     var pro1 = new Screens("Samsung CF390",170 ,24 , "Samsung");
@@ -49,20 +48,110 @@ function testERP() {
     storeHouse.addCategory(cat1);
     storeHouse.addCategory(cat2);
     storeHouse.addCategory(cat3);
-    console.log("las categorias añadidas son: ");
-    var itr = storeHouse.categories;
+    console.log("Las categorias añadidas son: ");
+    var itrC = storeHouse.categories;
+    mostrarIterators(itrC);
+    console.log("La categoria, defaultCategory, es una categoria que se crea por defecto");
+    console.log("");
+    console.log("....Creando TIENDAS....");
+    var t1 = new Shop("1111111AAAAAAA", "LaTiendaEnTuCasa");
+    var t2 = new Shop("2222222BBBBBBB", "MicroTiendasOnline");
+    var t3 = new Shop("3333333CCCCCCC", "ComputersForUs");
+    t1.phone = "666111222";
+    t2.phone = "666333444";
+    t3.phone = "666555777";
+    t1.address = "Calle Tienda 1";
+    t2.address = "Calle Tienda 2";
+    t3.address = "Calle Tienda 3";
+    console.log("Añadimos las tiendas al storeHouse");
+    storeHouse.addShop(t1);
+    storeHouse.addShop(t2);
+    storeHouse.addShop(t3);
+    console.log("Las tiendas añadidas son: ");
+    var itrS = storeHouse.shops;
+    mostrarIterators(itrS);
+
+    console.log("");
+    console.log("...Borrando...");
+    console.log("Borrar: " + t3.name);
+    storeHouse.removeShop(t3);
+    console.log("Borrar: " + cat1.title);
+    storeHouse.removeCategory(cat1);
+
+    console.log("añadimos de nuevo lo borrado");
+    storeHouse.addShop(t3);
+    storeHouse.addCategory(cat1)
+    
+    console.log("");
+    console.log("....Añadiendo Productos al StoreHouse...");
+    storeHouse.addProduct(t1,pro1,cat1);
+    storeHouse.addProduct(t1,pro1,cat2);
+    storeHouse.addProduct(t1,pro2,cat2);
+    storeHouse.addProduct(t1,pro3,cat3);
+    storeHouse.addProduct(t2,pro3,cat1);
+    storeHouse.addProduct(t2,pro1,cat2);
+    storeHouse.addProduct(t2,pro4,cat3);
+    storeHouse.addProduct(t1,pro4,cat2);
+    console.log("En la tienda: " + t1.name);
+    var itrT1 = storeHouse.getShopProducts(t1);
+    mostrarIterators(itrT1);
+    console.log("\nEn la tienda: " + t2.name);
+    var itrT2 = storeHouse.getShopProducts(t2);
+    mostrarIterators(itrT2);
+
+    console.log("");
+    
+    console.log("...Añadiendo Stock a los productos de las tiendas...");
+    storeHouse.addQuantityProductInShop(t1,pro1, 10);
+    storeHouse.addQuantityProductInShop(t1,pro2, 5);
+    storeHouse.addQuantityProductInShop(t1,pro3, 6);
+    storeHouse.addQuantityProductInShop(t2,pro1, 10);
+    storeHouse.addQuantityProductInShop(t2,pro3, 3);
+    storeHouse.addQuantityProductInShop(t2,pro4, 20);
+    storeHouse.addQuantityProductInShop(t2,pro4, 10);
+    storeHouse.addQuantityProductInShop(t1,pro4, 10);
+    
+    console.log("");
+    console.log("...Stock de los Productos...");
+
+    console.log("En la tienda: " + t1.name);
+    var itrTS1 = storeHouse.getStockProduct(t1);
+    mostrarIteratorsStock(itrTS1);
+    console.log("\nEn la tienda: " + t2.name);
+    var itrTS2 = storeHouse.getStockProduct(t2);
+    mostrarIteratorsStock(itrTS2);
+
+    console.log("");
+    console.log("...Mostramos Los Productos de una Tienda filtrado por una Categoria...");
+    var itrFilt = storeHouse.getCategoryProducts(t1, cat2);
+    mostrarIterators(itrFilt);
+
+    console.log("");
+    console.log("...Elminimamos un producto del ERPStoreHouse...");
+    storeHouse.removeProduct(pro4);
+    console.log("\nEn la tienda: " + t2.name);
+    var itrT2 = storeHouse.getShopProducts(t2);
+    console.log("El producto: " + pro4.name + " ha sido eliminado de las Tiendas");
+    console.log(t2.name);
+    mostrarIterators(itrT2);
+    console.log(t1.name);
+    var itrT2 = storeHouse.getShopProducts(t1);
+    mostrarIterators(itrT2);
+
+}
+
+function mostrarIterators(itr) {
     var item = itr.next();
     while (!item.done) {
         console.log(item.value.toString());
-        item = itr.next();
+        item= itr.next();
     }
-    console.log("La categoria, defaultCategory, es una categoria que se crea por defecto");
-
-    
-
-
-
-
-
+}
+function mostrarIteratorsStock(itr) {
+    var item = itr.next();
+    while (!item.done) {
+        console.log(item.value.product.name + " Stock: " + item.value.stock);
+        item= itr.next();
+    }
 }
 window.onload = testERP;

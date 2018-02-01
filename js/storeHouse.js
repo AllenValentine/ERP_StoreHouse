@@ -179,7 +179,9 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
             }
 
             //tienda por defecto
-            var pr_defaultShop = new Shop("11111111AAAAAAAA", "almacen");
+            var pr_defaultShop = new Shop("0000000ZZZZZZZ", "AlmacenGeneral");
+            pr_defaultShop.phone = "926212325";
+            pr_defaultShop.address = "Calle General";
             this.addShop(pr_defaultShop);
 
             Object.defineProperty(this, 'defaultShop', {
@@ -250,6 +252,7 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
 
             //categoria por defecto
             var pr_defaultCategory = new Category("DefaultCategory");
+            pr_defaultCategory.description = "Esta categoria es Global";
             this.addCategory(pr_defaultCategory);
 
             Object.defineProperty(this, 'defaultCategory', {
@@ -357,7 +360,6 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
                 var totalCategories = 0;
                 return {
                     next: function () {
-                        //debugger;
                         if( nextIndex < pr_shops[shop].products.length && pr_shops[shop].products[nextIndex].categories.length >= ++totalCategories){
                             if( pr_shops[shop].products[nextIndex].categories[nextCategory].title === category.title ){
                                 nextCategory=0;
@@ -374,7 +376,6 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
             
                 }
             }
-
 
             //elimina un producto  de todo el ERP
             this.removeProduct = function (product) {
@@ -421,6 +422,24 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
                 }
             }
 
+            this.getStockProduct = function (shop) {
+                if(!(shop instanceof Shop)){
+                    throw new ShopERPException();
+                }
+                var shopPosition = getShopPosition(shop);
+                if(shopPosition === -1){
+                    throw new ShopNotExistsERPException();
+                }
+                var nextIndex = 0;
+                return{
+                    next: function () {
+                        return nextIndex < pr_shops[shopPosition].products.length ?
+                            { value: pr_shops[shopPosition].products[nextIndex++], done: false } :
+                            { done: true };
+                    }
+                }
+            }
+
             //devuelve todos los productos de una determinada tienda
             this.getShopProducts = function (shop){
                 if(!(shop instanceof Shop)){
@@ -433,15 +452,12 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
                 var nextIndex = 0;
                 return{
                     next: function () {
-                        return nextIndex < pr_shops.length ?
+                        return nextIndex < pr_shops[shopPosition].products.length ?
                             { value: pr_shops[shopPosition].products[nextIndex++].product, done: false } :
                             { done: true };
                     }
                 }
             }
-                    
-            
-
         }//FIN DEL CONSTRUCTOR storeHouse
 
         StoreHouse.prototype = {};
