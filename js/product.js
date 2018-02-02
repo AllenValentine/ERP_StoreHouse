@@ -83,6 +83,10 @@
                 }
             }
         });
+        this.addImage = function(image){
+            pr_images.push(image);
+    }
+
     }
     Product.prototype = {};
     Product.prototype.constructor = Product;

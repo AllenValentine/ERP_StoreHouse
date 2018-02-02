@@ -6,7 +6,7 @@
 function testERP() {
     var storeHouse = StoreHouse.getInstance();
     StoreHouse.wHouse = "El Almacen 13";
-    
+
     console.log("-----Iniciando testeo------");
     console.log("....Creando PRODUCTOS....");
     var pro1 = new Screens("Samsung CF390",170 ,24 , "Samsung");
@@ -19,7 +19,7 @@ function testERP() {
     
     var pro3 = new Computer("LENOVO", 700, "8GB", "Intel Core I7-7700K 4.2GHz");
     //console.log(pro3.toString());
-
+    
     console.log("producto 1: " + pro1.name);
     console.log("Producto 2: " + pro2.name);
     console.log("Producto 3: " + pro3.name);
