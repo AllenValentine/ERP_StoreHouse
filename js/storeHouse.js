@@ -374,7 +374,7 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
 
             
 
-            //Obtenemos todos los productos de una categoria....
+            //Obtenemos todos los productos de una categoria
             this.getCategoryProducts = function (shop, category) {
                 if(!(category instanceof Category)){
                     throw new CategoryERPException();
@@ -448,7 +448,22 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
                 }
             }
 
-            this.getStockProduct = function (shop) {
+            this.getStock = function (shop, product) {
+                var shop = getShopPosition(shop);
+                var encontrado = false;
+                var i = 0;
+                var stock = -1;
+                while(!encontrado){
+                    if(pr_shops[shop].products[i].product.serialNumber === product.serialNumber){
+                        stock = pr_shops[shop].products[i].stock;
+                        encontrado = true
+                    }
+                    i++;
+                }
+                return stock;
+            }
+
+            this.getStockProducts = function (shop) {
                 if(!(shop instanceof Shop)){
                     throw new ShopERPException();
                 }

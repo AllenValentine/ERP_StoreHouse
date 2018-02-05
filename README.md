@@ -8,4 +8,11 @@ Practica DOM 1.1.1
 creado shopsMenusPopulate, shopPopulate y menuCategoryShopPopulate.
 falta -> productsCategoryShopPopulate, productShopPopulate globalProductPopulate y css.
 
+Practica DOM 1.1.2
+solventados algunos problemas
+creado productShopPopulate y productsCategoryShopPopulate(casi).
+falta -> globalProductPopulate
+
+
+
 

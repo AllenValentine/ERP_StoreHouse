@@ -7,6 +7,7 @@ header{
 }
 #nombreErp{
     text-align: center;
+    color: rgb(42, 61, 73);
 
 }
 #menu{
@@ -37,8 +38,9 @@ header{
 }
 
 #main-content{
-    padding: 20px 5px;
-    min-height: calc(100vh - 193px);
+    padding-top: 20px;
+    margin-top: 50px;
+    min-height: calc(100vh - 250px);
 }
 
 .shops{
@@ -48,10 +50,11 @@ header{
 
 .shops a {
     width: 100%;
+    color: rgb(42, 61, 73);
 }
 
 .shops a h2{
-    color: rgb(0, 0, 0);
+    color: rgb(42, 61, 73);
     margin:0;
 }
 
@@ -63,22 +66,45 @@ header{
     background-color: rgb(42, 61, 73);
 }
 
-#main-content{
-    margin-top: 50px;
-}
 #main-content nav{
     padding-top:10px; 
     background-color: rgb(251, 93, 2);
-    min-height: calc(100vh - 250px);
+    min-height: calc(100vh - 300px);
 }
 
 .ulCategories li{
     text-align: center;
     border: 1px solid rgb(251, 93, 2);
+    border-radius: 5px;
     background-color: rgb(255, 255, 255);
+}
+.ulCategories li a{
+    color: rgb(42, 61, 73);
+}
+
+.ulCategories li a:hover{
+    background-color: rgb(42, 61, 73);
+    color:rgb(255, 255, 255);
+}
+
+.img img{
+    width: 100%;
+}
+.productInfo{
+    padding: 100px;
+}
+
+input[type="submit"]{
+    background-color: rgb(251, 93, 2);
+    color: rgb(255, 255, 255);
+    border: 0;
+    width: 40%;
+    height: 30px;
+    border-radius: 10px;
 }
 
 footer{
     background-color: rgb(251, 93, 2);
     text-align: center;
+    color: rgb(42, 61, 73);;
 }
