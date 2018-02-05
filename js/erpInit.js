@@ -25,12 +25,12 @@ function init() {
     pro6.description = " Déjate transportar a una nueva dimensión en juegos virtuales con el PC gaming MSI Aegis 3 7RB-044EU y disfruta de un" + 
     + "rendimiento supremo como nunca lo has visto antes. Componentes de lujo y diseño espectacular aúnan fuerzas para que tengas una máquina perfecta.";
     
-    pro1.addImage("../images/samsungScreen.jpg");
-    pro2.addImage("../images/asusScreen.jpg");
-    pro3.addImage("../images/asusGraficCard.png");
-    pro4.addImage("../images/GigabyteGraficCard.png");
-    pro5.addImage("../images/lenovoComputer.png");
-    pro6.addImage("../images/msiComputer.jpg");
+    pro1.image = "images/samsungScreen.jpg";
+    pro2.image = "images/asusScreen.jpg";
+    pro3.image = "images/asusGraficCard.png";
+    pro4.image = "images/GigabyteGraficCard.png";
+    pro5.image = "images/lenovoComputer.png";
+    pro6.image = "images/msiComputer.jpg";
 
     /**CREAMOS LAS CATEGORIAS */
     var cat1 = new Category("Monitores");

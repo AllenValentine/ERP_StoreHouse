@@ -347,13 +347,39 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
                 
             }
 
+            this.getShopCategory = function (shop){
+                var nextIndex = 0;
+                var nextCategory = 0;
+                var totalCategories = 0;
+                var shop = getShopPosition(shop);
+                return {
+                    next: function(){
+                        if( nextIndex < pr_shops[shop].products.length ){
+                            if(nextCategory > pr_shops[shop].products[nextIndex].categories.length - 1){
+                                nextCategory = 0;
+                                totalCategories = 0;
+                                nextIndex++;
+                                return {value:'', done:false};
+                            }else{
+
+                                return {value: pr_shops[shop].products[nextIndex].categories[nextCategory++], done: false};
+                            }
+                        }else{
+                            return {done: true};
+
+                        }
+                    }            
+                }
+            }
+
+            
+
             //Obtenemos todos los productos de una categoria....
             this.getCategoryProducts = function (shop, category) {
                 if(!(category instanceof Category)){
                     throw new CategoryERPException();
                 }
                 var shop = getShopPosition(shop);
-                var i = 0;
                 //devuelve un iterador de productos
                 var nextIndex = 0;
                 var nextCategory = 0;

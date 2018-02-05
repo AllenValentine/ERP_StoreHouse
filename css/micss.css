@@ -1,0 +1,84 @@
+@charset "utf-8";
+
+header{
+    
+    background-color: rgb(251, 93, 2);
+    height: 100px;
+}
+#nombreErp{
+    text-align: center;
+
+}
+#menu{
+    width: 100%;
+    padding: 30px 0;
+}
+#menu nav{
+    width: 100%;
+    margin:10px 0;
+}
+
+#menu nav ul{
+    padding: 0;
+    display: inline;
+}
+#menu nav ul li{
+    width: 25%;
+    display: inline-block;
+    text-align: center;
+    background-color: rgb(251, 93, 2);
+}
+#menu nav ul li a{
+    width: 100%;
+    padding: 10px 0;
+    display: inline-block;
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+}
+
+#main-content{
+    padding: 20px 5px;
+    min-height: calc(100vh - 193px);
+}
+
+.shops{
+    border-radius: 10px;
+    margin: 10px 0;
+}
+
+.shops a {
+    width: 100%;
+}
+
+.shops a h2{
+    color: rgb(0, 0, 0);
+    margin:0;
+}
+
+.shops a img{
+    width: 100%;
+}
+
+.active{
+    background-color: rgb(42, 61, 73);
+}
+
+#main-content{
+    margin-top: 50px;
+}
+#main-content nav{
+    padding-top:10px; 
+    background-color: rgb(251, 93, 2);
+    min-height: calc(100vh - 250px);
+}
+
+.ulCategories li{
+    text-align: center;
+    border: 1px solid rgb(251, 93, 2);
+    background-color: rgb(255, 255, 255);
+}
+
+footer{
+    background-color: rgb(251, 93, 2);
+    text-align: center;
+}

@@ -24,7 +24,7 @@
         var pr_description = "";
         var pr_price = price;
         var pr_tax = 0.21;
-        var pr_images = [];
+        var pr_images = "";
         
         Object.defineProperty(this, 'serialNumber', {
             get: function () {
@@ -71,21 +71,18 @@
         });
 
         //Devuelve un iterator de los autores del gestor
-        Object.defineProperty(this, 'images', {
-            get: function () {
-                var nextIndex = 0;
-                return {
-                    next: function () {
-                        return nextIndex < pr_images.length ?
-                            { value: pr_images[nextIndex++], done: false } :
-                            { done: true };
-                    }
-                }
+        Object.defineProperty(this, 'image', {
+            get:function () {
+                return pr_images;
+            }, 
+            set: function (value) {
+              pr_images = value;  
             }
+            
         });
-        this.addImage = function(image){
+        /*this.addImage = function(image){
             pr_images.push(image);
-    }
+    }*/
 
     }
     Product.prototype = {};
