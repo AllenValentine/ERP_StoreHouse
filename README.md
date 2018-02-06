@@ -13,6 +13,9 @@ solventados algunos problemas
 creado productShopPopulate y productsCategoryShopPopulate(casi).
 falta -> globalProductPopulate
 
+Practica DOM 1.2.0
+
+
 
 
 

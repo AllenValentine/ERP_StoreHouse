@@ -25,12 +25,12 @@ function init() {
     pro6.description = " Déjate transportar a una nueva dimensión en juegos virtuales con el PC gaming MSI Aegis 3 7RB-044EU y disfruta de un" + 
     + "rendimiento supremo como nunca lo has visto antes. Componentes de lujo y diseño espectacular aúnan fuerzas para que tengas una máquina perfecta.";
     
-    pro1.image = "images/samsungScreen.jpg";
-    pro2.image = "images/asusScreen.jpg";
-    pro3.image = "images/asusGraficCard.png";
-    pro4.image = "images/GigabyteGraficCard.png";
-    pro5.image = "images/lenovoComputer.png";
-    pro6.image = "images/msiComputer.jpg";
+    pro1.image = "./images/samsungScreen.jpg";
+    pro2.image = "./images/asusScreen.jpg";
+    pro3.image = "./images/asusGraficCard.png";
+    pro4.image = "./images/GigabyteGraficCard.png";
+    pro5.image = "./images/lenovoComputer.png";
+    pro6.image = "./images/msiComputer.jpg";
 
     /**CREAMOS LAS CATEGORIAS */
     var cat1 = new Category("Monitores");
@@ -75,6 +75,17 @@ function init() {
 
     /**AÑADIMOS LOS PRODUCTOS A UNA TIENDA CON UNA CATEGORIA */
 
+    storeHouse.addProduct(null,pro1,cat1);
+    storeHouse.addProduct(null,pro2,cat1);
+    storeHouse.addProduct(null,pro3,cat2);
+    storeHouse.addProduct(null,pro4,cat2);
+    storeHouse.addProduct(null,pro5,cat3);
+    storeHouse.addProduct(null,pro6,cat7);
+    storeHouse.addProduct(null,pro6,cat3);
+    storeHouse.addProduct(null,pro1,cat4);
+    storeHouse.addProduct(null,pro2,cat5);
+    storeHouse.addProduct(null,pro3,cat5);
+
     storeHouse.addProduct(t1,pro1,cat1);
     storeHouse.addProduct(t1,pro1,cat4);
     storeHouse.addProduct(t1,pro2,cat1);
@@ -106,6 +117,14 @@ function init() {
     mostrarIterators(itrT3);*/
 
     /**AÑADIMOS STOCK A LOS PRODUCTOS */
+
+    storeHouse.addQuantityProductInShop(null, pro1, 17);
+    storeHouse.addQuantityProductInShop(null, pro2, 6);
+    storeHouse.addQuantityProductInShop(null, pro3, 12);
+    storeHouse.addQuantityProductInShop(null, pro4, 9);
+    storeHouse.addQuantityProductInShop(null, pro5, 10);
+    storeHouse.addQuantityProductInShop(null, pro6, 3);
+
 
     storeHouse.addQuantityProductInShop(t1, pro1, 10);
     storeHouse.addQuantityProductInShop(t1, pro2, 7);

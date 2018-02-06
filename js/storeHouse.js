@@ -386,16 +386,22 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
                 var totalCategories = 0;
                 return {
                     next: function () {
-                        if( nextIndex < pr_shops[shop].products.length && pr_shops[shop].products[nextIndex].categories.length >= ++totalCategories){
+                        //debugger;
+                        if( nextIndex < pr_shops[shop].products.length ){
                             if( pr_shops[shop].products[nextIndex].categories[nextCategory].title === category.title ){
                                 nextCategory=0;
                                 totalCategories = 0;
                                 return { value: pr_shops[shop].products[nextIndex++].product, done: false };
+                            }else if(pr_shops[shop].products[nextIndex].categories.length <= ++totalCategories){
+                                nextCategory=0;
+                                totalCategories = 0;
+                                nextIndex++;
+                                return { value:'', done: false };
                             }else{
                                 nextCategory++;
                                 return { value:'', done: false };
                             }
-                        }else{
+                        }else {
                             return {done: true};
                         }   
                     }
@@ -432,6 +438,9 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
                     throw new ProductERPException();
                 }
                 
+                if(shop === null || shop === 'undefined' || shop === ''){
+                    shop = this.defaultShop;
+                }
                 if(!(shop instanceof Shop)){
                     throw new ShopERPException();
                 }
@@ -456,13 +465,27 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
                 while(!encontrado){
                     if(pr_shops[shop].products[i].product.serialNumber === product.serialNumber){
                         stock = pr_shops[shop].products[i].stock;
-                        encontrado = true
-                    }
+                        encontrado = true;
+                }
                     i++;
                 }
                 return stock;
             }
 
+            this.totalStock = function (product) {
+                var shops = pr_shops.length;
+                var total = 0;
+                var i = 0;
+                while(i < shops){
+                    var position = getProductPosition(product, pr_shops[i].products);
+                    if(position !== -1){
+                        total += pr_shops[i].products[position].stock;
+                    }
+                    i++;
+                }
+                return total;
+            }
+            /*
             this.getStockProducts = function (shop) {
                 if(!(shop instanceof Shop)){
                     throw new ShopERPException();
@@ -479,7 +502,8 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
                             { done: true };
                     }
                 }
-            }
+            }*/
+                
 
             //devuelve todos los productos de una determinada tienda
             this.getShopProducts = function (shop){
