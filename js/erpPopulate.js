@@ -10,17 +10,20 @@ function iniPopulate(){
     var itr = store.shops;
     var item = itr.next();
     var header = document.getElementById("nombreErp");
-    var title = document.createElement("h1");
-    title.innerText = StoreHouse.wHouse;
+    var title = document.createElement("img");
+    title.setAttribute("src","images/logo.png");
+    title.setAttribute("alt","logo");
+    //title.innerText = StoreHouse.wHouse;
     header.appendChild(title);
     var divShops, imgShops, divShopsContent, linksShops, names;
     var imgShop="./images/shop.png";
+    var i = 1;
     while (!item.done) {
         divShops = document.createElement("div");
         // FOTOS
         
         imgShops = document.createElement("img");
-        imgShops.setAttribute("src", "./images/shop.png");
+        imgShops.setAttribute("src", "./images/shop"+(i++)+".png");
         imgShops.setAttribute("alt", "tiendas");
         linksShops = document.createElement("a");
         linksShops.setAttribute("href", "#");
