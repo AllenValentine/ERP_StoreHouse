@@ -67,7 +67,7 @@ header{
 }
 
 #main-content nav{
-    padding-top:10px; 
+    padding:10px 0; 
     background-color: rgb(251, 93, 2);
     min-height: calc(100vh - 300px);
 }
@@ -92,9 +92,27 @@ header{
 }
 .productInfo{
     padding: 100px;
+    font-weight: 700;
 }
 .description{
     margin-bottom: 10px;
+    font-weight: 700;
+    position: relative;
+}
+
+.datos p{
+    font-weight: 700;
+}
+
+.ficha{
+    color: rgb(42, 61, 73);
+    background-color: rgb(251, 93, 2);
+    padding: 5px 10px;
+    color: rgb(255, 255, 255);
+    border-radius: 10px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
 }
 
 input[type="submit"]{
@@ -106,15 +124,18 @@ input[type="submit"]{
     border-radius: 10px;
 }
 
-.allProduct{
-}
-
 .allProduct a img{
     width: 100%;
     height: 250px;
 }
 
+#closeWindows{
+    position: absolute;
+    right: 0;
+}
+
 footer{
+    margin-top: 20px;
     background-color: rgb(251, 93, 2);
     text-align: center;
     color: rgb(42, 61, 73);;

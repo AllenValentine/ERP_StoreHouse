@@ -3,7 +3,13 @@
 init();
 var shopContent = document.getElementById("main-content");
 var store = StoreHouse.getInstance();
-function iniPopulate(){
+
+//cerrar ventanas
+var divClose = document.getElementById("closeWindows");
+divClose.appendChild(aCloseWindows());
+
+
+function iniPopulate() {
     clearHeader();
     clearMenuContent();
     clearMainCont();
@@ -11,19 +17,18 @@ function iniPopulate(){
     var item = itr.next();
     var header = document.getElementById("nombreErp");
     var title = document.createElement("img");
-    title.setAttribute("src","images/logo.png");
-    title.setAttribute("alt","logo");
-    //title.innerText = StoreHouse.wHouse;
+    title.setAttribute("src", "images/logo.png");
+    title.setAttribute("alt", "logo");
     header.appendChild(title);
     var divShops, imgShops, divShopsContent, linksShops, names;
-    var imgShop="./images/shop.png";
+    var imgShop = "./images/shop.png";
     var i = 1;
     while (!item.done) {
         divShops = document.createElement("div");
         // FOTOS
-        
+
         imgShops = document.createElement("img");
-        imgShops.setAttribute("src", "./images/shop"+(i++)+".png");
+        imgShops.setAttribute("src", "./images/shop" + (i++) + ".png");
         imgShops.setAttribute("alt", "tiendas");
         linksShops = document.createElement("a");
         linksShops.setAttribute("href", "#");
@@ -35,23 +40,27 @@ function iniPopulate(){
         divShops.setAttribute("class", "col-md-3 text-center shops");
         divShops.appendChild(linksShops);
         shopContent.appendChild(divShops);
-       
+
         linksShops.addEventListener("click", shopPopulate(item.value));
         item = itr.next();
     }
 }
 
 function shopPopulate(shop) {
-    return function(){
+    return function () {
         clearMainCont();
         shopsMenusPopulate(shop);
         menuCategoryShopPopulate(shop);
         var itr = store.getShopProducts(shop);
         var item = itr.next();
-        var divProduct, imgProduct, linkProduct, names;
+        var divProduct, imgProduct, linkProduct, names, divAllProducts, rowProducts;
         var products = document.createElement("div");
 
-        while(!item.done){
+        divAllProducts = document.createElement("div");
+        divAllProducts.setAttribute("class", "col-md-9");
+        rowProducts = document.createElement("div");
+        rowProducts.setAttribute("class", "row");
+        while (!item.done) {
             divProduct = document.createElement("div");
             imgProduct = document.createElement("img");
             imgProduct.setAttribute("src", item.value.image);
@@ -63,9 +72,11 @@ function shopPopulate(shop) {
             names.innerText = item.value.name;
             linkProduct.appendChild(names);
             divProduct.setAttribute("id", item.value.name);
-            divProduct.setAttribute("class", "col-md-3 text-center allProduct");
+            divProduct.setAttribute("class", "col-md-4 text-center allProduct");
             divProduct.appendChild(linkProduct);
-            shopContent.appendChild(divProduct);
+            rowProducts.appendChild(divProduct);
+            divAllProducts.appendChild(rowProducts);
+            shopContent.appendChild(divAllProducts);
             linkProduct.addEventListener("click", productShopPopulate(item.value, shop));
 
             item = itr.next();
@@ -73,9 +84,10 @@ function shopPopulate(shop) {
     }
 }
 
-function productShopPopulate(product, shop) {
+function productShopPopulate(product, shopPopu) {
+    var shop = shopPopu;
     var pro = product;
-    return function(){
+    return function () {
         clearMainCont();
         shopsMenusPopulate(shop);
         menuCategoryShopPopulate(shop);
@@ -89,29 +101,55 @@ function productShopPopulate(product, shop) {
         divImg.setAttribute("class", "col-md-6 img");
         var divInfo = document.createElement("div");
         divInfo.setAttribute("class", "col-md-6 productInfo");
+
         var pName = document.createElement("p");
         var pPrice = document.createElement("p");
-        var pInchs = document.createElement("p");
-        var pPattent = document.createElement("p");
+
+        pName.setAttribute("name", pro.name);
+        pName.innerText = "Producto: " + pro.name + ".";
+        pPrice.setAttribute("name", pro.price);
+        pPrice.innerText = "Precio: " + pro.price + " € (sin IVA).";
+
+        divInfo.appendChild(pName);
+        divInfo.appendChild(pPrice);
+
+        if (pro instanceof Screens) {
+            var pInchs = document.createElement("p");
+            var pPattent = document.createElement("p");
+            pInchs.setAttribute("name", pro.inchs);
+            pInchs.innerText = "Pulgadas: " + pro.inchs + '".';
+            pPattent.setAttribute("name", pro.pattent);
+            pPattent.innerText = "Marca: " + pro.pattent + ".";
+            divInfo.appendChild(pInchs);
+            divInfo.appendChild(pPattent);
+        }
+        if (pro instanceof GraficCards) {
+            var pType = document.createElement("p");
+            pType.setAttribute("name", pro.type);
+            pType.innerText = "Tipo: " + pro.type + '.';
+            divInfo.appendChild(pType);
+        }
+
+        if (pro instanceof Computer) {
+            var pRom = document.createElement("p");
+            var pProcessor = document.createElement("p");
+            pRom.setAttribute("name", pro.rom);
+            pRom.innerText = "ROM: " + pro.rom + '.';
+            pProcessor.setAttribute("name", pro.processor);
+            pProcessor.innerText = "Procesador: " + pro.processor + ".";
+            divInfo.appendChild(pRom);
+            divInfo.appendChild(pProcessor);
+        }
+
         var pStock = document.createElement("p");
         var bBuy = document.createElement("input");
-        pName.setAttribute("name", pro.name);
-        pName.innerText = "Producto: " + pro.name;
-        pInchs.setAttribute("name", pro.inchs);
-        pInchs.innerText = "Pulgadas: " + pro.inchs + '"';
-        pPattent.setAttribute("name", pro.pattent);
-        pPattent.innerText = "Marca: " + pro.pattent;
-        pPrice.setAttribute("name", pro.price);  
-        pPrice.innerText = "Precio: " + pro.price + " €(sin IVA)";
-        pStock.setAttribute("name", stock);  
-        pStock.innerText = "Disponible: " + stock;
+
+        pStock.setAttribute("name", stock);
+        pStock.innerText = "Disponible: " + stock + " unidades.";
         bBuy.setAttribute("type", "submit");
         bBuy.setAttribute("value", "Comprar");
         bBuy.setAttribute("name", "comprar");
-        divInfo.appendChild(pName);
-        divInfo.appendChild(pPrice);
-        divInfo.appendChild(pInchs);
-        divInfo.appendChild(pPattent);
+
         divInfo.appendChild(pStock);
         divInfo.appendChild(bBuy);
         var imgProduct = document.createElement("img");
@@ -126,23 +164,28 @@ function productShopPopulate(product, shop) {
         var global = document.createElement("a");
         global.setAttribute("href", "#");
         global.innerText = "Disponibilidad";
-
+        var ficha = document.createElement("a");
+        ficha.setAttribute("href", "#");
+        ficha.setAttribute("class", "ficha");
+        ficha.innerText = "Ver Ficha";
         divDescrip.appendChild(hDescr);
-        divDescrip.appendChild(pDescrip); 
+        divDescrip.appendChild(pDescrip);
         divDescrip.appendChild(global);
+        divDescrip.appendChild(ficha);
         divImg.appendChild(imgProduct);
         divRow.appendChild(divImg);
         divRow.appendChild(divInfo);
         divRow.appendChild(divDescrip);
         divProduct.appendChild(divRow);
-        shopContent.appendChild(divProduct);   
+        shopContent.appendChild(divProduct);
         global.addEventListener("click", globalProductPopulate(shop, pro));
+        ficha.addEventListener("click", windowProduct(shop, pro));
     }
 }
 function globalProductPopulate(shop, product) {
     var prod = product;
     var totalPrice;
-    return function(){
+    return function () {
         clearMainCont();
         shopsMenusPopulate(shop);
         menuCategoryShopPopulate(shop);
@@ -152,7 +195,7 @@ function globalProductPopulate(shop, product) {
         productErp.setAttribute("class", "col-md-9");
         var product = document.createElement("div");
         product.setAttribute("class", "row");
-        
+
         var divImg = document.createElement("div");
         divImg.setAttribute("class", "col-md-6");
         var divImage = document.createElement("div");
@@ -170,31 +213,59 @@ function globalProductPopulate(shop, product) {
         var divView = document.createElement("div");
         divView.setAttribute("class", "datos");
         divView.setAttribute("id", prod.name);
-
         var pName = document.createElement("p");
         var pPrice = document.createElement("p");
-        var pInchs = document.createElement("p");
-        var pPattent = document.createElement("p");
-        var pStock = document.createElement("p");
-        var bBack = document.createElement("input");
         pName.setAttribute("name", prod.name);
         pName.innerText = "Producto: " + prod.name;
-        pInchs.setAttribute("name", prod.inchs);
-        pInchs.innerText = "Pulgadas: " + prod.inchs + '"';
-        pPattent.setAttribute("name", prod.pattent);
-        pPattent.innerText = "Marca: " + prod.pattent;
-        pPrice.setAttribute("name", totalPrice);  
-        pPrice.innerText = "Precio: " + totalPrice + " €(con IVA)";
-        pStock.setAttribute("name", stock);  
-        pStock.innerText = "Disponible en '"+StoreHouse.wHouse+"': " + stock + " unidades";
+        pPrice.setAttribute("name", totalPrice);
+        pPrice.innerText = "Precio: " + totalPrice + " €(" + prod.tax + "% IVA)";
+        divView.appendChild(pName);
+        divView.appendChild(pPrice);
+        
+
+        if (prod instanceof Screens) {
+            var pInchs = document.createElement("p");
+            var pPattent = document.createElement("p");
+            pInchs.setAttribute("name", prod.inchs);
+            pInchs.innerText = "Pulgadas: " + prod.inchs + '".';
+            pPattent.setAttribute("name", prod.pattent);
+            pPattent.innerText = "Marca: " + prod.pattent + ".";
+            divView.appendChild(pInchs);
+            divView.appendChild(pPattent);
+            
+        }
+        if (prod instanceof GraficCards) {
+            var pType = document.createElement("p");
+            pType.setAttribute("name", prod.type);
+            pType.innerText = "Tipo: " + prod.type + '.';
+            divView.appendChild(pType);
+        }
+
+        if (prod instanceof Computer) {
+            var pRom = document.createElement("p");
+            var pProcessor = document.createElement("p");
+            pRom.setAttribute("name", prod.rom);
+            pRom.innerText = "ROM: " + prod.rom + '.';
+            pProcessor.setAttribute("name", prod.processor);
+            pProcessor.innerText = "Procesador: " + prod.processor + ".";
+            divView.appendChild(pRom);
+            divView.appendChild(pProcessor);
+        }
+        var pPrice = document.createElement("p");
+        var pStock = document.createElement("p");
+        var pDescrip = document.createElement("p");
+        var bBack = document.createElement("input");
+
+        pStock.setAttribute("name", stock);
+        pStock.innerText = "Disponible en '" + StoreHouse.wHouse + "': " + stock + " unidades";
+        pDescrip.innerText = "Descripcion: \n" + prod.description;
         bBack.setAttribute("type", "submit");
         bBack.setAttribute("value", "volver");
         bBack.setAttribute("name", "volver");
-        divView.appendChild(pName);
-        divView.appendChild(pPrice);
-        divView.appendChild(pInchs);
-        divView.appendChild(pPattent);
+
+
         divView.appendChild(pStock);
+        divView.appendChild(pDescrip);
         divView.appendChild(bBack);
         divInfo.appendChild(divView)
         product.appendChild(divInfo);
@@ -203,36 +274,33 @@ function globalProductPopulate(shop, product) {
 
         bBack.addEventListener("click", shopPopulate(shop));
 
-
-       //console.log(store.totalStock(product));
     }
-    
-    
 }
 
 
 
-function menuCategoryShopPopulate(shop){
-    
+function menuCategoryShopPopulate(shop) {
+
     clearMainCont();
-    
+
     var itr = store.getShopCategory(shop);
     var item = itr.next();
-    var pos, catLi,catA;
+    var pos, catLi, catA;
     var categories = [];
     var menuCat = document.createElement("nav");
     menuCat.setAttribute("class", "col-md-3");
     var catUl = document.createElement("ul");
-    
+
     catUl.setAttribute("class", "nav nav-pills nav-stacked ulCategories");
-    
-    while(!item.done){
-        if(item.value != ''){;
+
+    while (!item.done) {
+        if (item.value != '') {
+            
             function compareCategories(element) {
-                return element.title === item.value.title;   
+                return element.title === item.value.title;
             }
             pos = categories.findIndex(compareCategories);
-            if(pos === -1){
+            if (pos === -1) {
                 categories.push(item.value);
             }
         }
@@ -250,20 +318,20 @@ function menuCategoryShopPopulate(shop){
         menuCat.appendChild(catUl);
         shopContent.appendChild(menuCat);
 
-        catA.addEventListener("click", productCategoryShopPopulate(shop,categories[i]));       
+        catA.addEventListener("click", productCategoryShopPopulate(shop, categories[i]));
     }
 
 }
 //no va bien el getCategoryProduct
 function productCategoryShopPopulate(shop, category) {
-    return function(){
+    return function () {
         clearMainCont();
         menuCategoryShopPopulate(shop);
         var divProduct, imgProduct, linkProduct, names, divContain;
         var itr = store.getCategoryProducts(shop, category);
         var item = itr.next();
         while (!item.done) {
-            if(item.value !== ''){
+            if (item.value !== '') {
                 divProduct = document.createElement("div");
                 imgProduct = document.createElement("img");
                 divContain = document.createElement("div");
@@ -283,10 +351,10 @@ function productCategoryShopPopulate(shop, category) {
                 shopContent.appendChild(divContain);
 
                 linkProduct.addEventListener("click", productShopPopulate(item.value, shop));
-        
+
             }
             item = itr.next();
-            
+
         }
     }
 }
@@ -312,7 +380,7 @@ function shopsMenusPopulate(shop) {
         var menuLi = document.createElement("li");
         var menuA = document.createElement("a");
         menuA.setAttribute("href", "#");
-        if(shop.name === item.value.name){
+        if (shop.name === item.value.name) {
             menuA.setAttribute("class", "active");
         }
         menuLi.appendChild(menuA);
@@ -327,33 +395,34 @@ function shopsMenusPopulate(shop) {
 
     iniA.addEventListener("click", iniPopulate);
 
-    
+
 }
 
 
 
-function clearMainCont(){
-/*Funcion para limpiar el shopContent */
-  var allChilds = shopContent.children;
-  while(allChilds.length > 0) {
-    shopContent.removeChild(allChilds[0]);
-  }
+function clearMainCont() {
+    /*Funcion para limpiar el shopContent */
+    var allChilds = shopContent.children;
+    while (allChilds.length > 0) {
+        shopContent.removeChild(allChilds[0]);
+    }
 }
-function clearMenuContent(){
-/*Funcion para limpiar el menu */
-  var allMenu = menu.children;
-  while(allMenu.length > 0) {
-    menu.removeChild(allMenu[0]);
-  }
+function clearMenuContent() {
+    /*Funcion para limpiar el menu */
+    var allMenu = menu.children;
+    while (allMenu.length > 0) {
+        menu.removeChild(allMenu[0]);
+    }
 }
 
-function clearHeader(){
+function clearHeader() {
     /*Funcion para limpiar el header */
     var nombreErp = document.getElementById("nombreErp");
     var name = nombreErp.children;
-      while(name.length > 0) {
+    while (name.length > 0) {
         nombreErp.removeChild(name[0]);
-      }
     }
+}
+
 
 window.onload = iniPopulate;

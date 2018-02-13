@@ -15,6 +15,9 @@ falta -> globalProductPopulate
 
 Practica DOM 1.2.0
 
+Practica BOM 1.3.0
+Finalizado creacion de ventanas
+
 
 
 
