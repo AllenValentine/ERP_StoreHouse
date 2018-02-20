@@ -1,15 +1,29 @@
 @charset "utf-8";
 
 header{
-    
     background-color: rgb(251, 93, 2);
     height: 100px;
+}
+#cabecera{
+    padding: 0;
 }
 #nombreErp{
     text-align: center;
     color: rgb(42, 61, 73);
 
 }
+
+.usuario{
+    color: rgb(42, 61, 73);
+    font-size: 16px;
+    font-variant: small-caps;
+}
+.closeSession{
+    padding-left: 5px;
+    font-size: 16px;
+    font-variant: small-caps;
+}
+
 #menu{
     width: 100%;
     padding: 10px 0;
@@ -28,6 +42,7 @@ header{
     display: inline-block;
     text-align: center;
     background-color: rgb(251, 93, 2);
+
 }
 #menu nav ul li a{
     width: 100%;

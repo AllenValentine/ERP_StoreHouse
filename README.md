@@ -18,6 +18,10 @@ Practica DOM 1.2.0
 Practica BOM 1.3.0
 Finalizado creacion de ventanas
 
+Practica 7 - Formularios 1.4.0
+Ejercicio 5 - Finalizado
+Ejercicio 6 - Finalizado
+
 
 
 

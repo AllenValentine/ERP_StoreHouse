@@ -8,6 +8,7 @@ var store = StoreHouse.getInstance();
 var divClose = document.getElementById("closeWindows");
 divClose.appendChild(aCloseWindows());
 
+var cookie = getCookie("username");
 
 function iniPopulate() {
     clearHeader();
@@ -15,6 +16,39 @@ function iniPopulate() {
     clearMainCont();
     var itr = store.shops;
     var item = itr.next();
+    var session = document.getElementById("nombreErp");
+    if(cookie.length > 0){
+        var conf = document.createElement("a");
+        var closeSession = document.createElement("a");
+        var usr = document.createElement("span");
+        conf.setAttribute("href", "#");
+        closeSession.setAttribute("href", "#");
+        conf.setAttribute("class", "btn btn-lg pull-right");
+        closeSession.setAttribute("class", "closeSession pull-left");
+        conf.setAttribute("id", "configuracion");
+        usr.setAttribute("class", "usuario pull-left");
+        usr.innerText = "Usuario: " + cookie;
+        conf.innerText = "Configuracion";
+        closeSession.innerText = "Cerrar Sesion";
+        session.appendChild(usr);
+        session.appendChild(conf);
+        session.appendChild(closeSession);
+        conf.addEventListener("click", menuConf);
+        closeSession.addEventListener("click", function(){
+            document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        });
+        
+    }else{
+        var user = document.createElement("a");
+        user.setAttribute("href", "#");
+        user.setAttribute("class", "btn btn-lg pull-right");
+        user.setAttribute("id", "iniSesion");
+        
+        user.innerText = "Iniciar Sesion";
+        
+        session.appendChild(user);
+        user.addEventListener("click", modalLogin());
+    }
     var header = document.getElementById("nombreErp");
     var title = document.createElement("img");
     title.setAttribute("src", "images/logo.png");
@@ -23,6 +57,7 @@ function iniPopulate() {
     var divShops, imgShops, divShopsContent, linksShops, names;
     var imgShop = "./images/shop.png";
     var i = 1;
+    
     while (!item.done) {
         divShops = document.createElement("div");
         // FOTOS
@@ -60,6 +95,7 @@ function shopPopulate(shop) {
         divAllProducts.setAttribute("class", "col-md-9");
         rowProducts = document.createElement("div");
         rowProducts.setAttribute("class", "row");
+        
         while (!item.done) {
             divProduct = document.createElement("div");
             imgProduct = document.createElement("img");
