@@ -1,43 +1,33 @@
 "use strict";
 
-function modalLogin() {
-    $(document).ready(function () {
-        $("#iniSesion").click(function () {
-            $("#myModal").modal();
-        });
-    });
-}
+var cookie = getCookie("username");
 
-function login(userName, password) {
-    var but = document.getElementById("log");
+function checkUser(usu, passw) {
     var usr = document.getElementById("usr");
     var psw = document.getElementById("psw");
-    var usu = "prueba";
-    var passw = "prueba";
+    var userName = document.getElementById("usrname").value;
+    var password = document.getElementById("pswInp").value;
     var user = getCookie("username");
     if (userName === usu && passw === password) {
         setCookie("username", userName, 2);
-        but.setAttribute("data-dismiss", "modal");
+        but.setAttribute("data-dismiss", "modal");        
     }
-    //debugger;
+    
     if(user !== userName && passw !== password){
         var msgUsr = document.createElement("small");
         var msgPsw = document.createElement("small");
-       
         msgUsr.innerText = "Introduce un Usuario";
         msgPsw.innerText = "Introduce una Contraseña";
         
         msgUsr.setAttribute("class", "form-text text-muted");
         msgPsw.setAttribute("class", "form-text text-muted");
-        usr.appendChild(msgUsr);
-        psw.appendChild(msgPsw);
         msgUsr.style.color = "rgb(255, 0, 0)";
         msgPsw.style.color = "rgb(255, 0, 0)";
+        usr.appendChild(msgUsr);
+        psw.appendChild(msgPsw);
         console.log("ERROR de LOGUEO");
-    }
-    
+    }    
 }
-
 
 
 function setCookie(cname,cvalue,exhours) {
@@ -62,4 +52,8 @@ function getCookie(cookieName) {
         }
     }
     return "";
+}
+
+function cleanCookie() {
+    document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }

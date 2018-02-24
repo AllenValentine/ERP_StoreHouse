@@ -1,7 +1,7 @@
 @charset "utf-8";
 
 header{
-    background-color: rgb(251, 93, 2);
+    background-color: rgb(255, 87, 34);
     height: 100px;
 }
 #cabecera{
@@ -41,7 +41,7 @@ header{
     width: 20%;
     display: inline-block;
     text-align: center;
-    background-color: rgb(251, 93, 2);
+    background-color: rgb(255, 87, 34);
 
 }
 #menu nav ul li a{
@@ -83,13 +83,13 @@ header{
 
 #main-content nav{
     padding:10px 0; 
-    background-color: rgb(251, 93, 2);
+    background-color: rgb(255, 87, 34);
     min-height: calc(100vh - 300px);
 }
 
 .ulCategories li{
     text-align: center;
-    border: 1px solid rgb(251, 93, 2);
+    border: 1px solid rgb(255, 87, 34);
     border-radius: 5px;
     background-color: rgb(255, 255, 255);
 }
@@ -121,7 +121,7 @@ header{
 
 .ficha{
     color: rgb(42, 61, 73);
-    background-color: rgb(251, 93, 2);
+    background-color: rgb(255, 87, 34);
     padding: 5px 10px;
     color: rgb(255, 255, 255);
     border-radius: 10px;
@@ -131,7 +131,7 @@ header{
 }
 
 input[type="submit"]{
-    background-color: rgb(251, 93, 2);
+    background-color: rgb(255, 87, 34);
     color: rgb(255, 255, 255);
     border: 0;
     width: 40%;
@@ -149,9 +149,33 @@ input[type="submit"]{
     right: 0;
 }
 
+#menuConf ul{
+    background-color: rgb(255, 255, 255);
+    width: 30%;
+    padding: 0;
+    margin: auto;
+}
+#menuConf ul li{    
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    text-align: center;
+    border: 1px solid rgb(255, 87, 34);
+}
+
+#menuConf ul li a{
+    text-decoration: none;
+    padding-top: 5px;
+    height: 30px;
+}
+#menuConf ul li a:hover{
+    background-color: rgb(42, 61, 73);
+    color:rgb(255, 255, 255);
+}
+
 footer{
     margin-top: 20px;
-    background-color: rgb(251, 93, 2);
+    background-color: rgb(255, 87, 34);
     text-align: center;
     color: rgb(42, 61, 73);;
 }

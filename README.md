@@ -22,6 +22,8 @@ Practica 7 - Formularios 1.4.0
 Ejercicio 5 - Finalizado
 Ejercicio 6 - Finalizado
 
+Practica 7 - Formularios 1.4.1
+Solucionado algunos problemas
 
 
 

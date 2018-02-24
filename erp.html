@@ -2,83 +2,84 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-        crossorigin="anonymous">
-    <link rel="stylesheet" href="css/micss.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="css/micss.css">
 
-    <title>ERP</title>
+  <title>ERP</title>
 </head>
 
 <body>
 
-    <div class="container">
-        <!-- Modal -->
-        <div class="modal fade" id="myModal" role="dialog">
-          <div class="modal-dialog">
-          
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-body" style="padding:40px 50px;">
-                <form role="form">
-                  <div class="form-group" id="usr">
-                    <label for="usrname"><span class="glyphicon glyphicon-user"></span> Username</label>
-                    <input type="text" class="form-control" id="usrname" placeholder="Introduce el Usuario">
-                  </div>
-                  <div class="form-group" id="psw">
-                    <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Password</label>
-                    <input type="text" class="form-control" id="pswInp" placeholder="Introduce la Contraseña">
-                  </div>
-                  <div class="checkbox">
-                    <label><input type="checkbox" value="" checked>Remember me</label>
-                  </div>
-                    <input type="button" id="log" class="btn btn-success btn-block" onclick="login(document.getElementById('usrname').value, document.getElementById('pswInp').value)" value="Login">
-                </form>
+  <div class="container">
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content" id="modal">
+          <div class="modal-body" style="padding:40px 50px;">
+            <form role="form">
+              <div class="form-group" id="usr">
+                <label for="usrname">
+                  <span class="glyphicon glyphicon-user"></span> Username</label>
+                <input type="text" class="form-control" id="usrname" placeholder="Introduce el Usuario">
               </div>
-              <div class="modal-footer">
-                <input type="button" class="btn btn-danger btn-default pull-left glyphicon-remove" value="Cancelar" data-dismiss="modal">
+              <div class="form-group" id="psw">
+                <label for="psw">
+                  <span class="glyphicon glyphicon-eye-open"></span> Password</label>
+                <input type="password" class="form-control" id="pswInp" placeholder="Introduce la Contraseña">
               </div>
-            </div>
-            
+              <input type="button" id="log" class="btn btn-success btn-block" value="Login">
+            </form>
           </div>
-        </div> 
+          <div class="modal-footer">
+            <input type="button" class="btn btn-danger btn-default pull-left glyphicon-remove" value="Cancelar" data-dismiss="modal">
+          </div>
+        </div>
+
       </div>
-    <header class="container-fluid">
-        <div class="container" id="cabecera">
-            <div id="nombreErp">
-            </div>
-            <div id="menu">
-            </div>
-        </div>
-    </header>
-    <div id="closeWindows">
-
     </div>
-    <main class="container">
-        <div class="row" id="main-content">
-        </div>
-    </main>
 
-    <footer class="container-fluid">
-        <h2>Juan Antonio Martinez Melero 2ºDAW</h2>
-        <p>Desarollo Web en Entorno Cliente</p>
-    </footer>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
-    <script src="js/baseException.js"></script>
-    <script src="js/storeHouse.js"></script>
-    <script src="js/product.js"></script>
-    <script src="js/coords.js"></script>
-    <script src="js/category.js"></script>
-    <script src="js/shop.js"></script>
-    <script src="js/erpInit.js"></script>
-    <script src="js/indexProduct.js"></script>
-    <script src="js/cookie.js"></script>
-    <script src="js/forms.js"></script>
-    <script src="js/erpPopulate.js"></script>
+  <header class="container-fluid">
+    <div class="container" id="cabecera">
+      <div id="nombreErp">
+      </div>
+      <div id="menu">
+      </div>
+    </div>
+  </header>
+  <div id="closeWindows">
 
-    <!--<script src="js/test.js"></script>-->
+  </div>
+  <main class="container">
+    <div class="row" id="main-content">
+    </div>
+  </main>
+
+  <footer class="container-fluid">
+    <h2>Juan Antonio Martinez Melero 2ºDAW</h2>
+    <p>Desarollo Web en Entorno Cliente</p>
+  </footer>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+  <script src="js/baseException.js"></script>
+  <script src="js/storeHouse.js"></script>
+  <script src="js/product.js"></script>
+  <script src="js/coords.js"></script>
+  <script src="js/category.js"></script>
+  <script src="js/shop.js"></script>
+  <script src="js/erpInit.js"></script>
+  <script src="js/indexProduct.js"></script>
+  <script src="js/cookie.js"></script>
+  <script src="js/forms.js"></script>
+  <script src="js/erpPopulate.js"></script>
+
+  <!--<script src="js/test.js"></script>-->
 </body>
 
 </html>

@@ -3,21 +3,32 @@
 init();
 var shopContent = document.getElementById("main-content");
 var store = StoreHouse.getInstance();
-
+//usuario y contraseña
+var cookie = getCookie("username");
+var usu = "prueba";
+var passw = "prueba";
 //cerrar ventanas
 var divClose = document.getElementById("closeWindows");
 divClose.appendChild(aCloseWindows());
 
-var cookie = getCookie("username");
+//boton para logearse y que muestre que se ha logueado
+var but = document.getElementById("log");
+but.addEventListener("click", iniPopulate);
 
 function iniPopulate() {
     clearHeader();
     clearMenuContent();
     clearMainCont();
+    
     var itr = store.shops;
     var item = itr.next();
-    var session = document.getElementById("nombreErp");
-    if(cookie.length > 0){
+    var header = document.getElementById("nombreErp");
+    var title = document.createElement("img");
+    title.setAttribute("src", "images/logo.png");
+    title.setAttribute("alt", "logo");
+    header.appendChild(title);
+    checkUser(usu, passw);
+    if(document.cookie.length > 0){
         var conf = document.createElement("a");
         var closeSession = document.createElement("a");
         var usr = document.createElement("span");
@@ -30,30 +41,23 @@ function iniPopulate() {
         usr.innerText = "Usuario: " + cookie;
         conf.innerText = "Configuracion";
         closeSession.innerText = "Cerrar Sesion";
-        session.appendChild(usr);
-        session.appendChild(conf);
-        session.appendChild(closeSession);
+        header.appendChild(usr);
+        header.appendChild(conf);
+        header.appendChild(closeSession);
         conf.addEventListener("click", menuConf);
-        closeSession.addEventListener("click", function(){
-            document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        });
-        
+        closeSession.addEventListener("click", cleanCookie); 
     }else{
         var user = document.createElement("a");
         user.setAttribute("href", "#");
         user.setAttribute("class", "btn btn-lg pull-right");
         user.setAttribute("id", "iniSesion");
+        user.setAttribute("data-toggle", "modal");
+        user.setAttribute("data-target", "#myModal");
         
         user.innerText = "Iniciar Sesion";
         
-        session.appendChild(user);
-        user.addEventListener("click", modalLogin());
+        header.appendChild(user);
     }
-    var header = document.getElementById("nombreErp");
-    var title = document.createElement("img");
-    title.setAttribute("src", "images/logo.png");
-    title.setAttribute("alt", "logo");
-    header.appendChild(title);
     var divShops, imgShops, divShopsContent, linksShops, names;
     var imgShop = "./images/shop.png";
     var i = 1;
@@ -459,6 +463,4 @@ function clearHeader() {
         nombreErp.removeChild(name[0]);
     }
 }
-
-
 window.onload = iniPopulate;
