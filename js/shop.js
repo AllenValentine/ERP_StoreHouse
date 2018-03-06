@@ -6,9 +6,6 @@ function Shop(cif, name) {
     if (!(this instanceof Shop)) {
         throw new InvalidAccessConstructorException();
     }
-    //Para quitar espacios en blanco
-    cif = cif.trim();
-    name = name.trim();
     //Mas adelante si es posible ponerle expresiones regulares
     if (cif === 'undefined' || cif === '') {
         throw new EmptyValueException("cif");

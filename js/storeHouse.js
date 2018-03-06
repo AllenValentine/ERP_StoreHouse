@@ -166,6 +166,16 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
                 }
                 return pr_shops.length;
             }
+            this.getShop = function (cif) {
+                //debugger;
+                for (let i = 0; i < pr_shops.length; i++) {
+                    if(cif === pr_shops[i].shops.cif){
+                        return pr_shops[i].shops;
+                    }
+                    
+                }
+                
+            }
 
             //esta funcion devuelve la posicoin de la tienda en el array,o de las tiendas, o 1 si no existe
             function getShopPosition(shop){

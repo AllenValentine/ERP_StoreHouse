@@ -25,7 +25,6 @@ function checkUser(usu, passw) {
         msgPsw.style.color = "rgb(255, 0, 0)";
         usr.appendChild(msgUsr);
         psw.appendChild(msgPsw);
-        console.log("ERROR de LOGUEO");
     }    
 }
 

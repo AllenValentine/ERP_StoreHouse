@@ -14,21 +14,18 @@ divClose.appendChild(aCloseWindows());
 //boton para logearse y que muestre que se ha logueado
 var but = document.getElementById("log");
 but.addEventListener("click", iniPopulate);
-
 function iniPopulate() {
     clearHeader();
     clearMenuContent();
-    clearMainCont();
-    
-    var itr = store.shops;
-    var item = itr.next();
+
+
     var header = document.getElementById("nombreErp");
     var title = document.createElement("img");
     title.setAttribute("src", "images/logo.png");
     title.setAttribute("alt", "logo");
     header.appendChild(title);
     checkUser(usu, passw);
-    if(document.cookie.length > 0){
+    if (document.cookie.length > 0) {
         var conf = document.createElement("a");
         var closeSession = document.createElement("a");
         var usr = document.createElement("span");
@@ -44,24 +41,35 @@ function iniPopulate() {
         header.appendChild(usr);
         header.appendChild(conf);
         header.appendChild(closeSession);
+        clearMainCont();
         conf.addEventListener("click", menuConf);
-        closeSession.addEventListener("click", cleanCookie); 
-    }else{
+        closeSession.addEventListener("click", cleanCookie);
+
+    } else {
         var user = document.createElement("a");
         user.setAttribute("href", "#");
         user.setAttribute("class", "btn btn-lg pull-right");
         user.setAttribute("id", "iniSesion");
         user.setAttribute("data-toggle", "modal");
         user.setAttribute("data-target", "#myModal");
-        
+
         user.innerText = "Iniciar Sesion";
-        
+
         header.appendChild(user);
     }
+
+    createStructure();
+    clearInputsModalLog();
+}
+
+function createStructure() {
+    clearMainCont();
+    var itr = store.shops;
+    var item = itr.next();
     var divShops, imgShops, divShopsContent, linksShops, names;
     var imgShop = "./images/shop.png";
     var i = 1;
-    
+
     while (!item.done) {
         divShops = document.createElement("div");
         // FOTOS
@@ -75,7 +83,7 @@ function iniPopulate() {
         names = document.createElement("h2");
         names.innerText = item.value.name;
         linksShops.appendChild(names);
-        divShops.setAttribute("id", item.value.name);
+        divShops.setAttribute("id", item.value.cif);
         divShops.setAttribute("class", "col-md-3 text-center shops");
         divShops.appendChild(linksShops);
         shopContent.appendChild(divShops);
@@ -99,7 +107,7 @@ function shopPopulate(shop) {
         divAllProducts.setAttribute("class", "col-md-9");
         rowProducts = document.createElement("div");
         rowProducts.setAttribute("class", "row");
-        
+
         while (!item.done) {
             divProduct = document.createElement("div");
             imgProduct = document.createElement("img");
@@ -261,7 +269,7 @@ function globalProductPopulate(shop, product) {
         pPrice.innerText = "Precio: " + totalPrice + " €(" + prod.tax + "% IVA)";
         divView.appendChild(pName);
         divView.appendChild(pPrice);
-        
+
 
         if (prod instanceof Screens) {
             var pInchs = document.createElement("p");
@@ -272,7 +280,7 @@ function globalProductPopulate(shop, product) {
             pPattent.innerText = "Marca: " + prod.pattent + ".";
             divView.appendChild(pInchs);
             divView.appendChild(pPattent);
-            
+
         }
         if (prod instanceof GraficCards) {
             var pType = document.createElement("p");
@@ -328,14 +336,14 @@ function menuCategoryShopPopulate(shop) {
     var pos, catLi, catA;
     var categories = [];
     var menuCat = document.createElement("nav");
-    menuCat.setAttribute("class", "col-md-3");
+    menuCat.setAttribute("class", "menuCategory col-md-3");
     var catUl = document.createElement("ul");
 
     catUl.setAttribute("class", "nav nav-pills nav-stacked ulCategories");
 
     while (!item.done) {
         if (item.value != '') {
-            
+
             function compareCategories(element) {
                 return element.title === item.value.title;
             }
@@ -438,7 +446,71 @@ function shopsMenusPopulate(shop) {
 
 }
 
+function insertNewShop() {
+    var divCif = document.getElementById("divCif");
+    var divName = document.getElementById("divName");
+    var cif = document.getElementById("cif").value;
+    var name = document.getElementById("name").value;
+    var address = document.getElementById("address").value;
+    var tel = document.getElementById("tel").value;
+    var t = new Shop(cif, name);
+    t.address = address;
+    t.phone = tel;
+    debugger;
+    store.addShop(t);
+    console.log(t);
+    insertShop.setAttribute("data-dismiss", "modal");
+    createStructure();
+    clearInputsModalShop();
+}
+//cambiar de modal a pag???
+function modifyShop(cif) {
+    var cif = cif;
+    return function () {
+        //console.log(cifx); 
+        // var j = document.getElementById(shop.getAttribute("id")); 
+        var modif = document.getElementsByClassName("modif");
+        for (let i = 0; i < modif.length; i++) {
+            modif[i].setAttribute("data-toggle", "modal");
+            modif[i].setAttribute("data-target", "#createTienda");
 
+        }
+
+        var t = new Shop();
+        t = store.getShop(cif);
+        var nCif = document.getElementById("cif");
+        //nCif.setAttribute("readonly","readonly");
+        var name = document.getElementById("name");
+        var address = document.getElementById("address");
+        var tel = document.getElementById("tel");
+        nCif.setAttribute("value", t.cif);
+        name.setAttribute("value", t.name);
+        address.setAttribute("value", t.address);
+        tel.setAttribute("value", t.phone);
+        insertShop.removeEventListener("click", insertNewShop);
+        insertShop.addEventListener("click", function () {
+            t.name = name.value;
+            t.address = address.value;
+            t.phone = tel.value;
+        });
+        insertShop.setAttribute("data-dismiss", "modal");
+        createStructure();
+        clearInputsModalShop();
+
+    }
+
+}
+
+function deleteShop(cif) {
+    var cif = cif;
+    return function(){
+        var t = new Shop();
+        t = store.getShop(cif);
+        store.removeShop(t);
+        createStructure();
+
+    }
+}
 
 function clearMainCont() {
     /*Funcion para limpiar el shopContent */
@@ -462,5 +534,14 @@ function clearHeader() {
     while (name.length > 0) {
         nombreErp.removeChild(name[0]);
     }
+}
+var formShop = document.getElementById("formShop");
+function clearInputsModalShop() {
+    formShop.reset();
+}
+
+var formLogin = document.getElementById("formLog");
+function clearInputsModalLog() {
+    formLogin.reset();
 }
 window.onload = iniPopulate;

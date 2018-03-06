@@ -58,22 +58,22 @@ header{
     min-height: calc(100vh - 250px);
 }
 
-.shops{
+.shops,newShop{
     border-radius: 10px;
     margin: 10px 0;
 }
 
-.shops a {
+.shops a, .newShop a {
     width: 100%;
     color: rgb(42, 61, 73);
 }
 
-.shops a h2{
+.shops a h2, .newShop a h2{
     color: rgb(42, 61, 73);
     margin:0;
 }
 
-.shops a img{
+.shops a img, .newShop a img{
     width: 100%;
 }
 
@@ -81,7 +81,7 @@ header{
     background-color: rgb(42, 61, 73);
 }
 
-#main-content nav{
+.menuCategory{
     padding:10px 0; 
     background-color: rgb(255, 87, 34);
     min-height: calc(100vh - 300px);
