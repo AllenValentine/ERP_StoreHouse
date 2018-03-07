@@ -456,19 +456,15 @@ function insertNewShop() {
     var t = new Shop(cif, name);
     t.address = address;
     t.phone = tel;
-    debugger;
     store.addShop(t);
-    console.log(t);
     insertShop.setAttribute("data-dismiss", "modal");
     createStructure();
     clearInputsModalShop();
 }
-//cambiar de modal a pag???
+
 function modifyShop(cif) {
     var cif = cif;
     return function () {
-        //console.log(cifx); 
-        // var j = document.getElementById(shop.getAttribute("id")); 
         var modif = document.getElementsByClassName("modif");
         for (let i = 0; i < modif.length; i++) {
             modif[i].setAttribute("data-toggle", "modal");
@@ -479,7 +475,7 @@ function modifyShop(cif) {
         var t = new Shop();
         t = store.getShop(cif);
         var nCif = document.getElementById("cif");
-        //nCif.setAttribute("readonly","readonly");
+        //nCif.setAttribute("readonly", "readonly");
         var name = document.getElementById("name");
         var address = document.getElementById("address");
         var tel = document.getElementById("tel");
@@ -495,20 +491,16 @@ function modifyShop(cif) {
         });
         insertShop.setAttribute("data-dismiss", "modal");
         createStructure();
-        clearInputsModalShop();
-
     }
-
 }
 
 function deleteShop(cif) {
     var cif = cif;
-    return function(){
+    return function () {
         var t = new Shop();
         t = store.getShop(cif);
         store.removeShop(t);
         createStructure();
-
     }
 }
 

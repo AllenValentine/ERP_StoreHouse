@@ -21,8 +21,8 @@ function createConfShop(shop){
         var spanDelet = document.createElement("span");
         modif.setAttribute("href", "#");
         modif.setAttribute("class", "modif");
-       
         delet.setAttribute("href", "#");
+        delet.setAttribute("class", "delete");
         spanModif.setAttribute("class", "glyphicon glyphicon-wrench");
         spanDelet.setAttribute("class", "glyphicon glyphicon-fire");
         modif.style.backgroundColor = "rgb(115, 201, 94)";
@@ -48,17 +48,16 @@ function createConfShop(shop){
         modif.setAttribute("id", shops[i].getAttribute('id'));
         delet.setAttribute("id", shops[i].getAttribute('id'));
         
+        //modificar una tienda
         modalShopModify(shops[i]);
-        deleteShops(shops[i]);
-        //modif.addEventListener("click", modifyShop(shops[i].getAttribute('id')));
-        //delet.addEventListener("click", deleteShop(shops[i].getAttribute('id')));
+        //eliminar una tienda
+        delet.addEventListener("click", deleteShop(shops[i].getAttribute('id')));
    
     }
     
-    //modif.addEventListener("click", modifyShop(shops[1].getAttribute('id')));
     var divShops, imgShops, divShopsContent, linksShops, names;
     divShops = document.createElement("div");
-    divShops.setAttribute("id", "newShop");
+    divShops.setAttribute("id", "new");
   
     imgShops = document.createElement("img");
     imgShops.setAttribute("src", "./images/aniadirTienda.png");
@@ -74,38 +73,16 @@ function createConfShop(shop){
     divShops.setAttribute("class", "col-md-3 text-center newShop");
     divShops.appendChild(linksShops);
     shopContent.appendChild(divShops);
-    //no lo hago bien
+    
     insertShop.addEventListener("click", insertNewShop);
 
 }
 
-function deleteShops(shop) {
-    var shop = document.getElementById(shop.getAttribute("id"));
-    shop.addEventListener("click", deleteShop(shop.getAttribute("id")));
-    
-}
 function modalShopModify(shop) {
-        //debugger;
     var j = document.getElementById(shop.getAttribute("id"));
-    //console.log(j.getAttribute("id"));
     j.addEventListener("click", modifyShop(shop.getAttribute("id")));
         
 }
-/*
-function deleteShop(hijo) {
-    debugger;
-    var itr = store.shops;
-    var item = itr.next();
-    while (!item.done) {
-        if(item.value.name === hijo.parentNode.innerText){
-            store.removeShop(item.value);
-        }
-
-        item = itr.next();
-    }
-    
-    console.log(hijo.parentNode.innerText);
-}*/
 function clearConfCont() {
     /*Funcion para limpiar el config */
     var divConf = document.getElementsByClassName("config");
