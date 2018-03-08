@@ -30,7 +30,11 @@ Ejercicio 2 - Finalizado
 Ejercicio 5 - Finalizado
 Ejercicio 6 - Finalizado
 
-
+Practica 7 -Formularios 1.4.3
+Ejercicio 1 - Finalizado
+Ejercicio 2 - Finalizado
+Ejercicio 5 - Finalizado
+Ejercicio 6 - Finalizado
 
 
 

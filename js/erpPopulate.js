@@ -98,7 +98,12 @@ function shopPopulate(shop) {
         clearMainCont();
         shopsMenusPopulate(shop);
         menuCategoryShopPopulate(shop);
-        var itr = store.getShopProducts(shop);
+        createShopPopulate(shop);
+    }
+}
+
+function createShopPopulate(shop) {
+    var itr = store.getShopProducts(shop);
         var item = itr.next();
         var divProduct, imgProduct, linkProduct, names, divAllProducts, rowProducts;
         var products = document.createElement("div");
@@ -129,7 +134,6 @@ function shopPopulate(shop) {
 
             item = itr.next();
         }
-    }
 }
 
 function productShopPopulate(product, shopPopu) {
@@ -328,7 +332,7 @@ function globalProductPopulate(shop, product) {
 
 
 function menuCategoryShopPopulate(shop) {
-
+    var shop = shop;
     clearMainCont();
 
     var itr = store.getShopCategory(shop);
@@ -365,12 +369,112 @@ function menuCategoryShopPopulate(shop) {
         catUl.appendChild(catLi);
         menuCat.appendChild(catUl);
         shopContent.appendChild(menuCat);
+        if (document.cookie.length > 0) {
+            var modif = document.createElement("a");
+            var delet = document.createElement("a");
+            var spanModif = document.createElement("span");
+            var spanDelet = document.createElement("span");
+            modif.setAttribute("href", "#");
+            modif.setAttribute("class", "modif");
+            delet.setAttribute("href", "#");
+            delet.setAttribute("class", "delete");
+            spanModif.setAttribute("class", "glyphicon glyphicon-wrench");
+            spanDelet.setAttribute("class", "glyphicon glyphicon-fire");
+            modif.style.backgroundColor = "rgb(115, 201, 94)";
+            modif.style.color = "white";
+            modif.style.display = "inline-block";
+            modif.style.width = "40px";
+            modif.style.height = "40px";
+            modif.style.borderRadius = "10px";
+            delet.style.backgroundColor = "rgb(242, 69, 69)";
+            delet.style.color = "white";
+            delet.style.display = "inline-block";
+            delet.style.width = "40px";
+            delet.style.height = "40px";
+            delet.style.borderRadius = "10px";
+            modif.style.marginRight = "10px";
+            modif.appendChild(spanModif);
+            delet.appendChild(spanDelet);
+            catLi.appendChild(modif);
+            catLi.appendChild(delet);
+            modif.addEventListener("click", modifCategory(xºcategories[i]));
+            delet.addEventListener("click",  removeCat(shop, categories[i]));
+        }
 
         catA.addEventListener("click", productCategoryShopPopulate(shop, categories[i]));
     }
+    if (document.cookie.length > 0) {
+        var catN = document.createElement("a")
+        var img = document.createElement("img");
+        img.setAttribute("src", "images/aniadirTienda.png");
+        img.style.width = "30px";
+        catN = document.createElement("a");
+        catN.setAttribute("href", "#");
 
+        catLi = document.createElement("li");
+        catLi.setAttribute("id", "new");
+        catN.appendChild(img);
+        catLi.appendChild(catN);
+        catUl.appendChild(catLi);
+        menuCat.appendChild(catUl);
+        shopContent.appendChild(menuCat);
+        catN.addEventListener("click", function () {
+            catN.setAttribute("data-toggle", "modal");
+            catN.setAttribute("data-target", "#categories");
+            var insertCategory = document.getElementById("insertarCat");
+            insertCategory.addEventListener("click", aniadirCat);
+
+        });
+    }
 }
-//no va bien el getCategoryProduct
+
+function modifCategory(category){
+    var category = category;
+    return function () {
+        var modif = document.getElementsByClassName("modif");
+        for (let i = 0; i < modif.length; i++) {
+            modif[i].setAttribute("data-toggle", "modal");
+            modif[i].setAttribute("data-target", "#categories");
+
+        }
+        var insertCategory = document.getElementById("insertarCat");
+        var title = document.getElementById("Title");
+        var descript = document.getElementById("descript");
+        title.value = category.title;
+        descript.value = category.description;
+        insertCategory.addEventListener("click", function(){
+            category.title = title.value;
+            category.description = descript.value; 
+            insertCategory.setAttribute("data-dismiss", "modal");
+        });
+        
+    }
+}
+
+function removeCat(shop, category){
+    var category = category;
+    var shop = shop;
+    return function(){
+        store.removeCategory(shop, category);
+        //falta Actualizar el menu de categorias
+        clearMainCont();
+        menuCategoryShopPopulate(shop);
+        createShopPopulate(shop);        
+    }
+}
+
+//añadimos categorias.
+function aniadirCat() {
+    var insertCategory = document.getElementById("insertarCat");
+    var title = document.getElementById("Title").value;
+    var descript = document.getElementById("descript").value;
+    var category = new Category(title);
+    category.description = descript;
+    store.addCategory(category);
+    insertCategory.setAttribute("data-dismiss", "modal");
+    clearInputsModalCategory();
+}
+
 function productCategoryShopPopulate(shop, category) {
     return function () {
         clearMainCont();
@@ -407,7 +511,7 @@ function productCategoryShopPopulate(shop, category) {
     }
 }
 
-
+//CAMBIAR
 var menu = document.getElementById("menu");
 function shopsMenusPopulate(shop) {
     clearMenuContent();
@@ -461,7 +565,6 @@ function insertNewShop() {
     createStructure();
     clearInputsModalShop();
 }
-
 function modifyShop(cif) {
     var cif = cif;
     return function () {
@@ -475,14 +578,13 @@ function modifyShop(cif) {
         var t = new Shop();
         t = store.getShop(cif);
         var nCif = document.getElementById("cif");
-        //nCif.setAttribute("readonly", "readonly");
         var name = document.getElementById("name");
         var address = document.getElementById("address");
         var tel = document.getElementById("tel");
-        nCif.setAttribute("value", t.cif);
-        name.setAttribute("value", t.name);
-        address.setAttribute("value", t.address);
-        tel.setAttribute("value", t.phone);
+        nCif.value = t.cif;
+        name.value = t.name;
+        address.value = t.address;
+        tel.value = t.phone;
         insertShop.removeEventListener("click", insertNewShop);
         insertShop.addEventListener("click", function () {
             t.name = name.value;
@@ -530,6 +632,11 @@ function clearHeader() {
 var formShop = document.getElementById("formShop");
 function clearInputsModalShop() {
     formShop.reset();
+}
+
+var formShop = document.getElementById("formCategory");
+function clearInputsModalCategory() {
+    formCategory.reset();
 }
 
 var formLogin = document.getElementById("formLog");

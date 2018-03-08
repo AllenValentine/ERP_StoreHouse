@@ -7,7 +7,7 @@ function menuConf() {
     clearConfCont();
     clearNewShopCont();
     createConfShop(shops);
-   
+    
 }
 
 function createConfShop(shop){
@@ -22,7 +22,7 @@ function createConfShop(shop){
         modif.setAttribute("href", "#");
         modif.setAttribute("class", "modif");
         delet.setAttribute("href", "#");
-        delet.setAttribute("class", "delete");
+        delet.setAttribute("class", "delecte");
         spanModif.setAttribute("class", "glyphicon glyphicon-wrench");
         spanDelet.setAttribute("class", "glyphicon glyphicon-fire");
         modif.style.backgroundColor = "rgb(115, 201, 94)";
@@ -77,12 +77,12 @@ function createConfShop(shop){
     insertShop.addEventListener("click", insertNewShop);
 
 }
-
 function modalShopModify(shop) {
     var j = document.getElementById(shop.getAttribute("id"));
     j.addEventListener("click", modifyShop(shop.getAttribute("id")));
         
 }
+
 function clearConfCont() {
     /*Funcion para limpiar el config */
     var divConf = document.getElementsByClassName("config");

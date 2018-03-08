@@ -242,17 +242,25 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
                 }
                 return pr_categories.length;
             }
-            //Cambiar, si se borra una categoria hay que cambiar esos productos a la de por defecto
-            this.removeCategory = function (category) {
+            //si se borra una categoria hay que cambiar esos productos a la de por defecto
+            this.removeCategory = function (shop, category) {
                 if(!(category instanceof Category)){
                     throw new CategoryERPException();
                 }
+                if(!(shop instanceof Shop)){
+                    throw new CategoryERPException();
+                }
                 var position = getCategoryPosition(category);
-                if (position !== -1){
-                    if(category.title !== pr_defaultCategory.title){
-                        pr_categories.splice(position, 1);
-                    }else{
-                        throw new DefaultCategoryERPExpception();
+                var shopPosition = getShopPosition(shop);
+                if (position !== -1 && shopPosition !== -1){
+                    for (let i = 0; i < pr_shops[shopPosition].products.length; i++) {
+                        for (let z = 0; z < pr_shops[shopPosition].products[i].categories.length; z++) {
+                            if(category.title === pr_shops[shopPosition].products[i].categories[z].title && category.title !== pr_defaultCategory){
+                                pr_shops[shopPosition].products[i].categories.splice(z, 1);
+                                pr_shops[shopPosition].products[i].categories.push(pr_defaultCategory);
+                            
+                            }
+                        }
                     }
                 }else{
                     throw new CategoryNotExistsREPException();
