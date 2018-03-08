@@ -36,5 +36,8 @@ Ejercicio 2 - Finalizado
 Ejercicio 5 - Finalizado
 Ejercicio 6 - Finalizado
 
-
+Practica 7 -Formularios 1.4.4
+Algunas mejoras:
+-menu desplegable
+-cambio Limpiar ventanas dentro del menu
 

@@ -7,9 +7,6 @@ var store = StoreHouse.getInstance();
 var cookie = getCookie("username");
 var usu = "prueba";
 var passw = "prueba";
-//cerrar ventanas
-var divClose = document.getElementById("closeWindows");
-divClose.appendChild(aCloseWindows());
 
 //boton para logearse y que muestre que se ha logueado
 var but = document.getElementById("log");
@@ -104,36 +101,36 @@ function shopPopulate(shop) {
 
 function createShopPopulate(shop) {
     var itr = store.getShopProducts(shop);
-        var item = itr.next();
-        var divProduct, imgProduct, linkProduct, names, divAllProducts, rowProducts;
-        var products = document.createElement("div");
+    var item = itr.next();
+    var divProduct, imgProduct, linkProduct, names, divAllProducts, rowProducts;
+    var products = document.createElement("div");
 
-        divAllProducts = document.createElement("div");
-        divAllProducts.setAttribute("class", "col-md-9");
-        rowProducts = document.createElement("div");
-        rowProducts.setAttribute("class", "row");
+    divAllProducts = document.createElement("div");
+    divAllProducts.setAttribute("class", "col-md-9");
+    rowProducts = document.createElement("div");
+    rowProducts.setAttribute("class", "row");
 
-        while (!item.done) {
-            divProduct = document.createElement("div");
-            imgProduct = document.createElement("img");
-            imgProduct.setAttribute("src", item.value.image);
-            imgProduct.setAttribute("alt", "producto");
-            linkProduct = document.createElement("a");
-            linkProduct.setAttribute("href", "#");
-            linkProduct.appendChild(imgProduct);
-            names = document.createElement("h4");
-            names.innerText = item.value.name;
-            linkProduct.appendChild(names);
-            divProduct.setAttribute("id", item.value.name);
-            divProduct.setAttribute("class", "col-md-4 text-center allProduct");
-            divProduct.appendChild(linkProduct);
-            rowProducts.appendChild(divProduct);
-            divAllProducts.appendChild(rowProducts);
-            shopContent.appendChild(divAllProducts);
-            linkProduct.addEventListener("click", productShopPopulate(item.value, shop));
+    while (!item.done) {
+        divProduct = document.createElement("div");
+        imgProduct = document.createElement("img");
+        imgProduct.setAttribute("src", item.value.image);
+        imgProduct.setAttribute("alt", "producto");
+        linkProduct = document.createElement("a");
+        linkProduct.setAttribute("href", "#");
+        linkProduct.appendChild(imgProduct);
+        names = document.createElement("h4");
+        names.innerText = item.value.name;
+        linkProduct.appendChild(names);
+        divProduct.setAttribute("id", item.value.name);
+        divProduct.setAttribute("class", "col-md-4 text-center allProduct");
+        divProduct.appendChild(linkProduct);
+        rowProducts.appendChild(divProduct);
+        divAllProducts.appendChild(rowProducts);
+        shopContent.appendChild(divAllProducts);
+        linkProduct.addEventListener("click", productShopPopulate(item.value, shop));
 
-            item = itr.next();
-        }
+        item = itr.next();
+    }
 }
 
 function productShopPopulate(product, shopPopu) {
@@ -359,7 +356,6 @@ function menuCategoryShopPopulate(shop) {
         item = itr.next();
     }
     for (let i = 0; i < categories.length; i++) {
-        //console.log(categories[i]);
         catA = document.createElement("a");
         catA.setAttribute("href", "#");
         catA.innerText = categories[i].title;
@@ -397,8 +393,8 @@ function menuCategoryShopPopulate(shop) {
             delet.appendChild(spanDelet);
             catLi.appendChild(modif);
             catLi.appendChild(delet);
-            modif.addEventListener("click", modifCategory(xºcategories[i]));
-            delet.addEventListener("click",  removeCat(shop, categories[i]));
+            modif.addEventListener("click", modifCategory(categories[i]));
+            delet.addEventListener("click", removeCat(shop, categories[i]));
         }
 
         catA.addEventListener("click", productCategoryShopPopulate(shop, categories[i]));
@@ -428,7 +424,7 @@ function menuCategoryShopPopulate(shop) {
     }
 }
 
-function modifCategory(category){
+function modifCategory(category) {
     var category = category;
     return function () {
         var modif = document.getElementsByClassName("modif");
@@ -442,24 +438,24 @@ function modifCategory(category){
         var descript = document.getElementById("descript");
         title.value = category.title;
         descript.value = category.description;
-        insertCategory.addEventListener("click", function(){
+        insertCategory.addEventListener("click", function () {
             category.title = title.value;
-            category.description = descript.value; 
+            category.description = descript.value;
             insertCategory.setAttribute("data-dismiss", "modal");
         });
-        
+
     }
 }
 
-function removeCat(shop, category){
+function removeCat(shop, category) {
     var category = category;
     var shop = shop;
-    return function(){
+    return function () {
         store.removeCategory(shop, category);
         //falta Actualizar el menu de categorias
         clearMainCont();
         menuCategoryShopPopulate(shop);
-        createShopPopulate(shop);        
+        createShopPopulate(shop);
     }
 }
 
@@ -511,10 +507,12 @@ function productCategoryShopPopulate(shop, category) {
     }
 }
 
-//CAMBIAR
 var menu = document.getElementById("menu");
+var menuNav = document.createElement("nav");
+menuNav.setAttribute("id", "menuPrincipal");
 function shopsMenusPopulate(shop) {
     clearMenuContent();
+
     var menuNav = document.createElement("nav");
     menuNav.setAttribute("id", "menuPrincipal");
     var menuUl = document.createElement("ul");
@@ -526,29 +524,55 @@ function shopsMenusPopulate(shop) {
     iniA.appendChild(iniSpan);
     iniLi.appendChild(iniA);
     menuUl.appendChild(iniLi);
-    var itr = store.shops;
-    var item = itr.next();
-    while (!item.done) {
-        var menuLi = document.createElement("li");
-        var menuA = document.createElement("a");
-        menuA.setAttribute("href", "#");
-        if (shop.name === item.value.name) {
-            menuA.setAttribute("class", "active");
-        }
-        menuLi.appendChild(menuA);
-        menuUl.appendChild(menuLi);
-        menuA.innerText = item.value.name;
-        menuA.addEventListener("click", shopPopulate(item.value));
+    var iniLiDrop = document.createElement("li");
+    iniLiDrop.setAttribute("id", "menuDrop")
+    var iniADrop = document.createElement("a");
+    iniADrop.setAttribute("href", "#");
+    iniADrop.innerText = "Tiendas";
+    iniLiDrop.appendChild(iniADrop);
+    menuUl.appendChild(iniLiDrop);
+    iniLiDrop.addEventListener("mouseenter", menuDrop(iniLiDrop));
+    iniLiDrop.addEventListener("mouseleave", removeMenuDrop);
 
-        item = itr.next();
-    }
     menuNav.appendChild(menuUl);
     menu.appendChild(menuNav);
+    //cerrar ventanas
+    var closeLi = document.createElement("li");
+    closeLi.setAttribute("class", "pull-right");
+    closeLi.appendChild(aCloseWindows());
+    menuUl.appendChild(closeLi);
 
     iniA.addEventListener("click", iniPopulate);
-
-
 }
+
+function menuDrop(li) {
+    var li = li;
+    return function () {
+        var divDrop = document.createElement("div");
+        divDrop.setAttribute("id", "drop");
+        divDrop.style.display = "block";
+        li.appendChild(divDrop);
+        var itr = store.shops;
+        var item = itr.next();
+        while (!item.done) {
+            var menuA = document.createElement("a");
+            menuA.setAttribute("href", "#");
+            divDrop.appendChild(menuA);
+            menuA.innerText = item.value.name;
+            menuA.addEventListener("click", shopPopulate(item.value));
+
+            item = itr.next();
+        }
+
+    }
+}
+function removeMenuDrop() {
+    /*Funcion que remueve el menu desplegable mostrado */
+    var divDrop = document.getElementById("drop");
+    divDrop.style.display = "hidden";
+    divDrop.parentElement.removeChild(divDrop);
+}
+
 
 function insertNewShop() {
     var divCif = document.getElementById("divCif");

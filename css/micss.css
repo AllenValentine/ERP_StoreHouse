@@ -31,24 +31,48 @@ header{
 #menu nav{
     width: 100%;
     margin:10px 0;
+    
 }
 
 #menu nav ul{
     padding: 0;
-    display: inline;
+    display: block;
+    background-color: rgb(255, 87, 34);
 }
 #menu nav ul li{
     width: 20%;
     display: inline-block;
     text-align: center;
+    list-style: none;
     background-color: rgb(255, 87, 34);
+    border: 1px solid rgb(42, 61, 73);
 
 }
 #menu nav ul li a{
     width: 100%;
     padding: 10px 0;
-    display: inline-block;
+    display: block;
     text-decoration: none;
+    color: rgb(255, 255, 255);
+}
+#menu nav ul li a:hover{
+    background-color: rgb(42, 61, 73);
+}
+
+#drop{
+    display: none;
+    width: inherit;
+    position:absolute;
+    z-index: 1;
+    margin-left: -50px;
+}
+#drop a{
+    width: 100%;
+    padding: 10px 0;
+    display: none;
+    text-decoration: none;
+    text-align: center;
+    background-color: rgb(255, 87, 34);
     color: rgb(255, 255, 255);
 }
 
