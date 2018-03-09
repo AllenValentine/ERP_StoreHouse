@@ -41,3 +41,9 @@ Algunas mejoras:
 -menu desplegable
 -cambio Limpiar ventanas dentro del menu
 
+Practica 7 -Formularios 1.4.5
+Ejercicio 1 - Finalizado
+Ejercicio 2 - Finalizado
+Ejercicio 3 - Finalizado
+Ejercicio 5 - Finalizado
+Ejercicio 6 - Finalizado

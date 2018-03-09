@@ -64,7 +64,6 @@ header{
     width: inherit;
     position:absolute;
     z-index: 1;
-    margin-left: -50px;
 }
 #drop a{
     width: 100%;
@@ -162,7 +161,15 @@ input[type="submit"]{
     height: 30px;
     border-radius: 10px;
 }
+.allProduct{
+    height: 360px;
+    padding-top: 30px;
+}
 
+#newProd{
+    padding-top: 100px;
+    padding-left: 50px;
+}
 .allProduct a img{
     width: 100%;
     height: 250px;
@@ -195,6 +202,9 @@ input[type="submit"]{
 #menuConf ul li a:hover{
     background-color: rgb(42, 61, 73);
     color:rgb(255, 255, 255);
+}
+#insertarProd{
+    margin-bottom: 10px;
 }
 
 footer{

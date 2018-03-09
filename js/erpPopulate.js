@@ -42,6 +42,7 @@ function iniPopulate() {
         conf.addEventListener("click", menuConf);
         closeSession.addEventListener("click", cleanCookie);
 
+
     } else {
         var user = document.createElement("a");
         user.setAttribute("href", "#");
@@ -66,6 +67,7 @@ function createStructure() {
     var divShops, imgShops, divShopsContent, linksShops, names;
     var imgShop = "./images/shop.png";
     var i = 1;
+    
 
     while (!item.done) {
         divShops = document.createElement("div");
@@ -88,7 +90,9 @@ function createStructure() {
         linksShops.addEventListener("click", shopPopulate(item.value));
         item = itr.next();
     }
+   
 }
+
 
 function shopPopulate(shop) {
     return function () {
@@ -100,16 +104,22 @@ function shopPopulate(shop) {
 }
 
 function createShopPopulate(shop) {
-    var itr = store.getShopProducts(shop);
-    var item = itr.next();
-    var divProduct, imgProduct, linkProduct, names, divAllProducts, rowProducts;
-    var products = document.createElement("div");
-
+    var divAllProducts, rowProducts;
     divAllProducts = document.createElement("div");
     divAllProducts.setAttribute("class", "col-md-9");
+    divAllProducts.setAttribute("id", "divAllProducts");
     rowProducts = document.createElement("div");
     rowProducts.setAttribute("class", "row");
-
+    rowProducts.setAttribute("id", "contentProducts");
+    divAllProducts.appendChild(rowProducts);
+    shopContent.appendChild(divAllProducts);
+    createProducts(shop);
+}
+function createProducts(shop) {
+    var rowProducts = document.getElementById("contentProducts");
+    var itr = store.getShopProducts(shop);
+    var item = itr.next();
+    var divProduct, imgProduct, linkProduct, names;
     while (!item.done) {
         divProduct = document.createElement("div");
         imgProduct = document.createElement("img");
@@ -125,11 +135,364 @@ function createShopPopulate(shop) {
         divProduct.setAttribute("class", "col-md-4 text-center allProduct");
         divProduct.appendChild(linkProduct);
         rowProducts.appendChild(divProduct);
-        divAllProducts.appendChild(rowProducts);
-        shopContent.appendChild(divAllProducts);
+
         linkProduct.addEventListener("click", productShopPopulate(item.value, shop));
 
+
+        if (document.cookie.length > 0) {
+            var delet = document.createElement("a");
+            var spanDelet = document.createElement("span");
+            delet.setAttribute("href", "#");
+            delet.setAttribute("class", "delete");
+
+            spanDelet.setAttribute("class", "glyphicon glyphicon-fire");
+            delet.style.backgroundColor = "rgb(242, 69, 69)";
+            delet.style.color = "white";
+            delet.style.display = "inline-block";
+            delet.style.width = "40px";
+            delet.style.height = "40px";
+            delet.style.borderRadius = "10px";
+            spanDelet.style.paddingTop = "10px";
+            delet.appendChild(spanDelet);
+            divProduct.appendChild(delet);
+
+            delet.addEventListener("click", removeProd(item.value, shop));
+
+        }
         item = itr.next();
+    }
+    if (document.cookie.length > 0) {
+        var divProduct, imgProduct, linksAddProducts, names;
+        divProduct = document.createElement("div");
+        divProduct.setAttribute("id", "newProd");
+
+        imgProduct = document.createElement("img");
+        imgProduct.setAttribute("src", "./images/aniadirTienda.png");
+        imgProduct.setAttribute("alt", "tiendas");
+        linksAddProducts = document.createElement("a");
+        linksAddProducts.setAttribute("href", "#");
+        linksAddProducts.setAttribute("data-toggle", "modal");
+        linksAddProducts.setAttribute("data-target", "#products");
+        linksAddProducts.appendChild(imgProduct);
+        names = document.createElement("h2");
+        names.innerText = "Añadir";
+        linksAddProducts.appendChild(names);
+        divProduct.setAttribute("class", "col-md-3 text-center newShop");
+        divProduct.appendChild(linksAddProducts);
+        rowProducts.appendChild(divProduct);
+        var mainModal = document.createElement("div");
+        mainModal.setAttribute("id", "mainModalProd");
+        formProduct.appendChild(mainModal);
+        var optionModalProducts = document.createElement("div");
+        optionModalProducts.setAttribute("id", "options");
+        formProduct.appendChild(optionModalProducts);
+        linksAddProducts.addEventListener("click", createNewProd(shop));
+    }
+}
+function createNewProd(shop) {
+    
+    var formProduct = document.getElementById("formProduct");
+    var mainModal = document.getElementById("mainModalProd");
+    var optionModalProducts = document.getElementById("options");
+    var h4 = document.getElementById("tiend");
+    h4.innerText = "Tienda: " + shop.name;
+    
+    clearModalformProd();
+    var divSelect = document.createElement("div");
+    divSelect.setAttribute("class", "form-group");
+    divSelect.setAttribute("id", "divSelect");
+
+    var labelSelect = document.createElement("label");
+    labelSelect.setAttribute("for", "prod");
+    labelSelect.innerText = "Producto ";
+    var prodSelect = document.createElement("select");
+    prodSelect.setAttribute("name", "producto");
+    prodSelect.setAttribute("id", "prod");
+    var optionProd = document.createElement("option");
+    optionProd.setAttribute("value", "");
+    optionProd.innerText = "";
+    var optionProd1 = document.createElement("option");
+    optionProd1.setAttribute("value", "1");
+    optionProd1.innerText = "Monitores";
+    var optionProd2 = document.createElement("option");
+    optionProd2.setAttribute("value", "2");
+    optionProd2.innerText = "Tarjeta Grafica";
+    var optionProd3 = document.createElement("option");
+    optionProd3.setAttribute("value", "3");
+    optionProd3.innerText = "Ordenador";
+    prodSelect.appendChild(optionProd);
+    prodSelect.appendChild(optionProd1);
+    prodSelect.appendChild(optionProd2);
+    prodSelect.appendChild(optionProd3);
+    divSelect.appendChild(labelSelect);
+    divSelect.appendChild(prodSelect);
+    mainModal.appendChild(divSelect);
+    
+    
+    var divName = document.createElement("div");
+    divName.setAttribute("class", "form-group");
+    divName.setAttribute("id", "divName");
+    var labelName = document.createElement("label");
+    labelName.setAttribute("for", "nameProd");
+    labelName.innerText = "Nombre";
+    var inputName = document.createElement("input");
+    inputName.setAttribute("type", "text");
+    inputName.setAttribute("class", "form-control");
+    inputName.setAttribute("id", "nameProd");
+    inputName.setAttribute("placeholder", "Nombre Producto");
+    divName.appendChild(labelName);
+    divName.appendChild(inputName);
+    mainModal.appendChild(divName);
+
+    var divPrice = document.createElement("div");
+    divPrice.setAttribute("class", "form-group");
+    divPrice.setAttribute("id", "divPrice");
+    var labelPrice = document.createElement("label");
+    labelPrice.setAttribute("for", "priceProd");
+    labelPrice.innerText = "Precio";
+    var inputPrice = document.createElement("input");
+    inputPrice.setAttribute("type", "text");
+    inputPrice.setAttribute("class", "form-control");
+    inputPrice.setAttribute("id", "priceProd");
+    inputPrice.setAttribute("placeholder", "Precio Producto");
+    divPrice.appendChild(labelPrice);
+    divPrice.appendChild(inputPrice);
+    mainModal.appendChild(divPrice);
+    var typeProd = document.getElementById("prod");
+    
+    typeProd.addEventListener("change", valorOptionProd(shop));
+}
+
+function valorOptionProd(shop) {
+
+    return function () {
+        //Recogemos el value del select
+        var typeProd = document.getElementById("prod");
+        var indice = typeProd.selectedIndex;
+        var valor = typeProd.options[indice].value;
+        createModalProduct(parseInt(valor), shop);
+    }
+}
+
+function createModalProduct(prodSelect, shop) {
+    var formProduct = document.getElementById("formProduct");
+    var optionModalProducts = document.getElementById("options");
+    if (prodSelect === 1) {
+        clearModalOptionProduct();
+        var divInchs = document.createElement("div");
+        divInchs.setAttribute("class", "form-group");
+        divInchs.setAttribute("id", "divInchs");
+        var labelInchs = document.createElement("label");
+        labelInchs.setAttribute("for", "inchsProd");
+        labelInchs.innerText = "Pulgadas";
+        var inputInchs = document.createElement("input");
+        inputInchs.setAttribute("type", "text");
+        inputInchs.setAttribute("class", "form-control");
+        inputInchs.setAttribute("id", "inchsProd");
+        inputInchs.setAttribute("placeholder", "Pulgadas");
+        divInchs.appendChild(labelInchs);
+        divInchs.appendChild(inputInchs);
+        optionModalProducts.appendChild(divInchs);
+
+        var divPattent = document.createElement("div");
+        divPattent.setAttribute("class", "form-group");
+        divPattent.setAttribute("id", "divPattent");
+        var labelPattent = document.createElement("label");
+        labelPattent.setAttribute("for", "pattentProd");
+        labelPattent.innerText = "Marca";
+        var inputPattent = document.createElement("input");
+        inputPattent.setAttribute("type", "text");
+        inputPattent.setAttribute("class", "form-control");
+        inputPattent.setAttribute("id", "pattentProd");
+        inputPattent.setAttribute("placeholder", "Marca Producto");
+        divPattent.appendChild(labelPattent);
+        divPattent.appendChild(inputPattent);
+        optionModalProducts.appendChild(divPattent);
+    }
+    if (prodSelect === 2) {
+        clearModalOptionProduct();
+        var divType = document.createElement("div");
+        divType.setAttribute("class", "form-group");
+        divType.setAttribute("id", "divType");
+        var labelType = document.createElement("label");
+        labelType.setAttribute("for", "pattentProd");
+        labelType.innerText = "Tipo";
+        var inputType = document.createElement("input");
+        inputType.setAttribute("type", "text");
+        inputType.setAttribute("class", "form-control");
+        inputType.setAttribute("id", "typeProd");
+        inputType.setAttribute("placeholder", "Tipo Producto");
+        divType.appendChild(labelType);
+        divType.appendChild(inputType);
+        optionModalProducts.appendChild(divType);
+    }
+    if (prodSelect === 3) {
+        clearModalOptionProduct();
+        var divRom = document.createElement("div");
+        divRom.setAttribute("class", "form-group");
+        divRom.setAttribute("id", "divRom");
+        var labelRom = document.createElement("label");
+        labelRom.setAttribute("for", "romProd");
+        labelRom.innerText = "ROM";
+        var inputRom = document.createElement("input");
+        inputRom.setAttribute("type", "text");
+        inputRom.setAttribute("class", "form-control");
+        inputRom.setAttribute("id", "romProd");
+        inputRom.setAttribute("placeholder", "ROM");
+        divRom.appendChild(labelRom);
+        divRom.appendChild(inputRom);
+        optionModalProducts.appendChild(divRom);
+
+        var divProcessor = document.createElement("div");
+        divProcessor.setAttribute("class", "form-group");
+        divProcessor.setAttribute("id", "divProcessor");
+        var labelProcessor = document.createElement("label");
+        labelProcessor.setAttribute("for", "processorProd");
+        labelProcessor.innerText = "Procesador";
+        var inputProcessor = document.createElement("input");
+        inputProcessor.setAttribute("type", "text");
+        inputProcessor.setAttribute("class", "form-control");
+        inputProcessor.setAttribute("id", "processorProd");
+        inputProcessor.setAttribute("placeholder", "Procesador");
+        divProcessor.appendChild(labelProcessor);
+        divProcessor.appendChild(inputProcessor);
+        optionModalProducts.appendChild(divProcessor);
+    }
+    var divDescript = document.createElement("div");
+    divDescript.setAttribute("class", "form-group");
+    divDescript.setAttribute("id", "divDescript");
+    var labelDescript = document.createElement("label");
+    labelDescript.setAttribute("for", "processorProd");
+    labelDescript.innerText = "Descripcion";
+    var inputDescript = document.createElement("input");
+    inputDescript.setAttribute("type", "text");
+    inputDescript.setAttribute("class", "form-control");
+    inputDescript.setAttribute("id", "descriptProd");
+    inputDescript.setAttribute("placeholder", "Descripcion");
+    divDescript.appendChild(labelDescript);
+    divDescript.appendChild(inputDescript);
+    optionModalProducts.appendChild(divDescript);
+
+    var divSelect = document.createElement("div");
+    divSelect.setAttribute("class", "form-group");
+    divSelect.setAttribute("id", "divSelectCat");
+    optionModalProducts.appendChild(divSelect);
+
+    var labelSelect = document.createElement("label");
+    labelSelect.setAttribute("for", "cat");
+    labelSelect.innerText = "Categoria";
+    var catSelect = document.createElement("select");
+    catSelect.setAttribute("name", "categories");
+    catSelect.setAttribute("class", "form-control");
+    catSelect.setAttribute("id", "category");
+    divSelect.appendChild(labelSelect);
+    divSelect.appendChild(catSelect);
+    var itr = store.categories;
+    var item = itr.next();
+    while (!item.done) {
+        var cat = document.createElement("option");
+        cat.setAttribute("value", item.value.title);
+        cat.innerText = item.value.title;
+        catSelect.appendChild(cat);
+        item = itr.next();
+    }
+    var divStock = document.createElement("div");
+    divStock.setAttribute("class", "form-group");
+    divStock.setAttribute("id", "divStock");
+    var labelStock = document.createElement("label");
+    labelStock.setAttribute("for", "stockProd");
+    labelStock.innerText = "Stock";
+    var inputCat = document.createElement("input");
+    inputCat.setAttribute("type", "number");
+    inputCat.setAttribute("class", "form-control");
+    inputCat.setAttribute("min", "1");
+    inputCat.setAttribute("id", "stockProd");
+    divStock.appendChild(labelStock);
+    divStock.appendChild(inputCat);
+    optionModalProducts.appendChild(divStock);
+    var selectCat = document.getElementById("category");
+    selectCat.onchange = function () {
+        var indice = selectCat.selectedIndex;
+        var valor = selectCat.options[indice].value;
+
+
+    };
+    var insertarProd = document.getElementById("insertarProd");
+    insertarProd.addEventListener("click", function () {
+        var name = document.getElementById("nameProd");
+        if(name.value === ""){
+            name.setAttribute("placeholder", "Introduce un Nombre");
+            name.style.border = "1px solid rgb(255, 0, 0)";
+            return false;
+        }
+        var price = document.getElementById("priceProd");
+        if(price.value === ""){
+            price.setAttribute("placeholder", "Introduce el Precio");
+            price.style.border = "1px solid rgb(255, 0, 0)";
+            return false;
+        }
+        if (prodSelect === 1) {
+            var inchs = document.getElementById("inchsProd");
+            if(inchs.value === ""){
+                inchs.setAttribute("placeholder", "Introduce las Pulgadas");
+                inchs.style.border = "1px solid rgb(255, 0, 0)";
+                return false;
+            }
+            var pattent = document.getElementById("pattentProd");
+            if(pattent.value === ""){
+                pattent.setAttribute("placeholder", "Introduce la Marca");
+                pattent.style.border = "1px solid rgb(255, 0, 0)";
+                return false;
+            }
+            var prod = new Screens(name.value, price.value, inchs.value, pattent.value);
+        }
+        if (prodSelect === 2) {
+            var type = document.getElementById("typeProd");
+            if(type.value === ""){
+                type.setAttribute("placeholder", "Introduce el Tipo");
+                type.style.border = "1px solid rgb(255, 0, 0)";
+                return false;
+            }
+            var prod = new GraficCards(name.value, price.value, type.value);
+        }
+        if (prodSelect === 3) {
+            var rom = document.getElementById("romProd");
+            if(rom.value === ""){
+                rom.setAttribute("placeholder", "Introduce la ROM");
+                rom.style.border = "1px solid rgb(255, 0, 0)";
+                return false;
+            }
+            var processor = document.getElementById("processorProd");
+            if(processor.value === ""){
+                processor.setAttribute("placeholder", "Introduce el Procesador");
+                processor.style.border = "1px solid rgb(255, 0, 0)";
+                return false;
+            }
+            var prod = new Computer(name.value, price.value, rom.value, processor.value);
+        }
+        var descript = document.getElementById("descriptProd");
+        prod.descript = descript.value;
+        prod.image = "./images/prox.png";
+        var stock = document.getElementById("stockProd");
+        var cat = store.getCategory(selectCat.value);
+        store.addProduct(shop, prod, cat);
+        store.addQuantityProductInShop(shop, prod, stock.value);
+        insertarProd.setAttribute("data-dismiss", "modal");
+        clearDivProducts();
+        clearModalOptionProduct();
+        createProducts(shop);
+        
+    });
+
+}
+
+function removeProd(prod, shop) {
+    var prod = prod;
+    var shop = shop;
+    return function () {
+        store.removeProduct(prod);
+        clearDivProducts();
+        createProducts(shop);
     }
 }
 
@@ -644,6 +1007,27 @@ function clearMenuContent() {
         menu.removeChild(allMenu[0]);
     }
 }
+function clearModalformProd() {
+    var formProduct = document.getElementById("mainModalProd");
+    var name = formProduct.children;
+    while (name.length > 0) {
+        formProduct.removeChild(name[0]);
+    }
+}
+function clearModalOptionProduct() {
+    var formOption = document.getElementById("options");
+    var name = formOption.children;
+    while (name.length > 0) {
+        formOption.removeChild(name[0]);
+    }
+}
+function clearModalInputs() {
+    var inputs = document.getElementById("inputs");
+    var name = formProduct.children;
+    while (name.length > 0) {
+        inputs.removeChild(name[0]);
+    }
+}
 
 function clearHeader() {
     /*Funcion para limpiar el header */
@@ -651,6 +1035,13 @@ function clearHeader() {
     var name = nombreErp.children;
     while (name.length > 0) {
         nombreErp.removeChild(name[0]);
+    }
+}
+function clearDivProducts() {
+    var allProduct = document.getElementById("contentProducts");
+    var divAllProds = allProduct.children;
+    while (divAllProds.length > 0) {
+        allProduct.removeChild(divAllProds[0]);
     }
 }
 var formShop = document.getElementById("formShop");

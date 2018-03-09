@@ -242,6 +242,18 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
                 }
                 return pr_categories.length;
             }
+
+            this.getCategory = function (title) {
+                //debugger;
+                for (let i = 0; i < pr_categories.length; i++) {
+                    if(title === pr_categories[i].title){
+                        return pr_categories[i];
+                    }
+                    
+                }
+                
+            }
+
             //si se borra una categoria hay que cambiar esos productos a la de por defecto
             this.removeCategory = function (shop, category) {
                 if(!(category instanceof Category)){
