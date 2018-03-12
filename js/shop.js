@@ -13,7 +13,7 @@ function Shop(cif, name) {
     if (name === 'undefined' || name === '') {
         throw new EmptyValueException("name");
     } 
-    // debugger;
+    
     var pr_cif = cif;
     var pr_name = name;
     var pr_address = "";

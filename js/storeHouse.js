@@ -189,10 +189,10 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
             }
 
             //tienda por defecto
-            var pr_defaultShop = new Shop("0000000ZZZZZZZ", "AlmacenGeneral");
+            /*var pr_defaultShop = new Shop("0000000ZZZZZZZ", "AlmacenGeneral");
             pr_defaultShop.phone = "926212325";
             pr_defaultShop.address = "Calle General";
-            this.addShop(pr_defaultShop);
+            this.addShop(pr_defaultShop);*/
 
             Object.defineProperty(this, 'defaultShop', {
                 get: function () {
@@ -281,9 +281,9 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
             }
 
             //categoria por defecto
-            var pr_defaultCategory = new Category("DefaultCategory");
+            /*var pr_defaultCategory = new Category("DefaultCategory");
             pr_defaultCategory.description = "Esta categoria es Global";
-            this.addCategory(pr_defaultCategory);
+            this.addCategory(pr_defaultCategory);*/
 
             Object.defineProperty(this, 'defaultCategory', {
                 get: function () {

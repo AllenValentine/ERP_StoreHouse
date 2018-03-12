@@ -1,6 +1,6 @@
 "use strict";
-
-init();
+initIDB();
+//init();
 var shopContent = document.getElementById("main-content");
 var store = StoreHouse.getInstance();
 //usuario y contraseña
@@ -1058,4 +1058,9 @@ var formLogin = document.getElementById("formLog");
 function clearInputsModalLog() {
     formLogin.reset();
 }
-window.onload = iniPopulate;
+//window.onload = iniPopulate;
+window.setTimeout(function(){
+    iniPopulate();
+    window.clearTimeout();
+}, 300);
+
