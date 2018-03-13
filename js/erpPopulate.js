@@ -804,6 +804,24 @@ function modifCategory(category) {
         insertCategory.addEventListener("click", function () {
             category.title = title.value;
             category.description = descript.value;
+            var db;
+            var db_name = "StoreHouse13";
+            var request = indexedDB.open(db_name, 1);
+            request.onsuccess = function (event) {
+                db = event.target.result;
+                var storeCats = db.transaction(["categories"], "readwrite").objectStore("categories");
+                var oldCat = storeCats.get(title.value); //obtenemos la categoria especifica
+                oldCat.onsuccess = function (event) {
+                    var cat = oldCat.result;
+                    cat.title = title.value;
+                    cat.description = descript.value;
+                    //debugger;
+                    var modCat = storeCats.put(cat);
+                    modCat.onsuccess = function (event) {
+                        console.log("Categoria Modificada");
+                    }
+                }
+            }
             insertCategory.setAttribute("data-dismiss", "modal");
         });
 
@@ -814,11 +832,19 @@ function removeCat(shop, category) {
     var category = category;
     var shop = shop;
     return function () {
-        store.removeCategory(shop, category);
-        //falta Actualizar el menu de categorias
-        clearMainCont();
-        menuCategoryShopPopulate(shop);
-        createShopPopulate(shop);
+        var db;
+        var db_name = "StoreHouse13";
+        var request = indexedDB.open(db_name, 1);
+        request.onsuccess = function (event) {
+            db = event.target.result;
+            var storeCats = db.transaction(["categories"], "readwrite").objectStore("categories");
+            //var oldCat = storeCats.delete(category.title); //obtenemos la categoria especifica
+            oldCat.onsuccess = function (event) {
+                /**TERMINAR YA QUE NO HAY QUE BORRARLO DEL ALMACEN 
+                 * SI NO DE CADA PRODUCTO DENTRO DEL ALMACEN SHOPS
+                 */
+            }
+        }
     }
 }
 
@@ -827,11 +853,25 @@ function aniadirCat() {
     var insertCategory = document.getElementById("insertarCat");
     var title = document.getElementById("Title").value;
     var descript = document.getElementById("descript").value;
-    var category = new Category(title);
-    category.description = descript;
-    store.addCategory(category);
+
+    var db;
+    var db_name = "StoreHouse13";
+    var request = indexedDB.open(db_name, 1);
+    request.onsuccess = function (event) {
+        var newCat = { title: title, description: descript };
+        db = event.target.result;
+        var storeCat = db.transaction(["categories"], "readwrite");
+        var categ = storeCat.objectStore("categories", { keyPath: "title" });
+        var insertCat = categ.add(newCat);
+        insertCat.onsuccess = function (event) {
+            console.log("Categoria Añadida");
+            var category = new Category(title);
+            category.description = descript;
+            store.addCategory(category);
+            clearInputsModalCategory();
+        }
+    }
     insertCategory.setAttribute("data-dismiss", "modal");
-    clearInputsModalCategory();
 }
 
 function productCategoryShopPopulate(shop, category) {
@@ -1032,7 +1072,7 @@ function deleteShop(cif) {
         var request = indexedDB.open(db_name, 1);
         request.onsuccess = function (event) {
             db = event.target.result;
-             //obtenemos un objeto con las tiendas en modo lectura escritura
+            //obtenemos un objeto con las tiendas en modo lectura escritura
             var request1 = db.transaction(["shops"], "readwrite").objectStore("shops");
             var remShop = request1.delete(cif); //eliminamos la tienda del almacen
             remShop.onsuccess = function (event) { //en el caso de acierto...

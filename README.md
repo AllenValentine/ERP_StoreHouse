@@ -54,3 +54,9 @@ Datos creados en el Almacen y obtenidos para crear el ERP inicial
 Practica 8 - Indexed DB 1.5.1
 Datos creados en el Almacen y obtenidos para crear el ERP inicial
 Creamos, Eliminamos y Modificamos las tiendas tanto en el almacen como en el ERP
+
+Practica 8 - Indexed DB 1.5.2
+Datos creados en el Almacen y obtenidos para crear el ERP inicial
+Creamos, Eliminamos y Modificamos las tiendas tanto en el almacen como en el ERP
+Creamos y Modificamos Categorias, falta Borrar Categorias
+Falta Crear y Eliminar productos

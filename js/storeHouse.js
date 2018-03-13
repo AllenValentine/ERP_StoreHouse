@@ -222,7 +222,7 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
 				}		
 
 				function compareElements(element) {
-				  return (element.title == category.title)
+				  return (element.title === category.title)
 				}
 				
 				return pr_categories.findIndex(compareElements);		
@@ -267,7 +267,7 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
                 if (position !== -1 && shopPosition !== -1){
                     for (let i = 0; i < pr_shops[shopPosition].products.length; i++) {
                         for (let z = 0; z < pr_shops[shopPosition].products[i].categories.length; z++) {
-                            if(category.title === pr_shops[shopPosition].products[i].categories[z].title && category.title !== pr_categories[0]){
+                            if(category.title === pr_shops[shopPosition].products[i].categories[z].title && category.title !== pr_categories[0].title){
                                 pr_shops[shopPosition].products[i].categories.splice(z, 1);
                                 pr_shops[shopPosition].products[i].categories.push(pr_categories[0]);
                             
@@ -297,13 +297,13 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
                     throw new ProductERPException();
                 }
                 if(category === null || category === 'undefined' || category === '') {
-                    category = this.defaultCategory;
+                    category = pr_categories[0];
                 }
                 if(!(category instanceof Category)){
                     throw new CategoryERPException();
                 }
                 if(shop === null || shop === 'undefined' || shop === ''){
-                    shop = this.defaultShop;
+                    shop = pr_shops[0];
                 }
                 if(!(shop instanceof Shop)){
                     throw new ShopERPException();
