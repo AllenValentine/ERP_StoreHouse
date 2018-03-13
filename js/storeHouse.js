@@ -156,7 +156,7 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
                 }
                 var position = getShopPosition(shop);
                 if (position !== -1) {
-                    if(shop.cif !== pr_defaultShop.cif){
+                    if(shop.cif !== "0000000ZZZZZZZ"){
                         pr_shops.splice(position, 1);
                     }else{
                         throw new DefaultShopERPException();
@@ -194,11 +194,11 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
             pr_defaultShop.address = "Calle General";
             this.addShop(pr_defaultShop);*/
 
-            Object.defineProperty(this, 'defaultShop', {
+            /*Object.defineProperty(this, 'defaultShop', {
                 get: function () {
                     return pr_defaultShop;
                 }
-            });
+            });*/
             //definimos el atributo category como un array para tener todas las categorias
             var pr_categories = [];
 
@@ -222,7 +222,7 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
 				}		
 
 				function compareElements(element) {
-				  return (element.title === category.title)
+				  return (element.title == category.title)
 				}
 				
 				return pr_categories.findIndex(compareElements);		
@@ -267,9 +267,9 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
                 if (position !== -1 && shopPosition !== -1){
                     for (let i = 0; i < pr_shops[shopPosition].products.length; i++) {
                         for (let z = 0; z < pr_shops[shopPosition].products[i].categories.length; z++) {
-                            if(category.title === pr_shops[shopPosition].products[i].categories[z].title && category.title !== pr_defaultCategory){
+                            if(category.title === pr_shops[shopPosition].products[i].categories[z].title && category.title !== pr_categories[0]){
                                 pr_shops[shopPosition].products[i].categories.splice(z, 1);
-                                pr_shops[shopPosition].products[i].categories.push(pr_defaultCategory);
+                                pr_shops[shopPosition].products[i].categories.push(pr_categories[0]);
                             
                             }
                         }
@@ -285,11 +285,11 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
             pr_defaultCategory.description = "Esta categoria es Global";
             this.addCategory(pr_defaultCategory);*/
 
-            Object.defineProperty(this, 'defaultCategory', {
+            /*Object.defineProperty(this, 'defaultCategory', {
                 get: function () {
                     return pr_defaultCategory;
                 }
-            });
+            });*/
 
             // añadir producto a una tienda y su categoria
             this.addProduct = function (shop, product, category) {

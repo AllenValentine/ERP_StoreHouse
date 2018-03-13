@@ -50,3 +50,7 @@ Ejercicio 6 - Finalizado
 
 Practica 8 - Indexed DB 1.5.0
 Datos creados en el Almacen y obtenidos para crear el ERP inicial
+
+Practica 8 - Indexed DB 1.5.1
+Datos creados en el Almacen y obtenidos para crear el ERP inicial
+Creamos, Eliminamos y Modificamos las tiendas tanto en el almacen como en el ERP

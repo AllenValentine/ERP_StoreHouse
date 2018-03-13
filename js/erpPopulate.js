@@ -67,7 +67,7 @@ function createStructure() {
     var divShops, imgShops, divShopsContent, linksShops, names;
     var imgShop = "./images/shop.png";
     var i = 1;
-    
+
 
     while (!item.done) {
         divShops = document.createElement("div");
@@ -90,7 +90,7 @@ function createStructure() {
         linksShops.addEventListener("click", shopPopulate(item.value));
         item = itr.next();
     }
-   
+
 }
 
 
@@ -190,13 +190,13 @@ function createProducts(shop) {
     }
 }
 function createNewProd(shop) {
-    
+
     var formProduct = document.getElementById("formProduct");
     var mainModal = document.getElementById("mainModalProd");
     var optionModalProducts = document.getElementById("options");
     var h4 = document.getElementById("tiend");
     h4.innerText = "Tienda: " + shop.name;
-    
+
     clearModalformProd();
     var divSelect = document.createElement("div");
     divSelect.setAttribute("class", "form-group");
@@ -227,8 +227,8 @@ function createNewProd(shop) {
     divSelect.appendChild(labelSelect);
     divSelect.appendChild(prodSelect);
     mainModal.appendChild(divSelect);
-    
-    
+
+
     var divName = document.createElement("div");
     divName.setAttribute("class", "form-group");
     divName.setAttribute("id", "divName");
@@ -259,7 +259,7 @@ function createNewProd(shop) {
     divPrice.appendChild(inputPrice);
     mainModal.appendChild(divPrice);
     var typeProd = document.getElementById("prod");
-    
+
     typeProd.addEventListener("change", valorOptionProd(shop));
 }
 
@@ -420,26 +420,26 @@ function createModalProduct(prodSelect, shop) {
     var insertarProd = document.getElementById("insertarProd");
     insertarProd.addEventListener("click", function () {
         var name = document.getElementById("nameProd");
-        if(name.value === ""){
+        if (name.value === "") {
             name.setAttribute("placeholder", "Introduce un Nombre");
             name.style.border = "1px solid rgb(255, 0, 0)";
             return false;
         }
         var price = document.getElementById("priceProd");
-        if(price.value === ""){
+        if (price.value === "") {
             price.setAttribute("placeholder", "Introduce el Precio");
             price.style.border = "1px solid rgb(255, 0, 0)";
             return false;
         }
         if (prodSelect === 1) {
             var inchs = document.getElementById("inchsProd");
-            if(inchs.value === ""){
+            if (inchs.value === "") {
                 inchs.setAttribute("placeholder", "Introduce las Pulgadas");
                 inchs.style.border = "1px solid rgb(255, 0, 0)";
                 return false;
             }
             var pattent = document.getElementById("pattentProd");
-            if(pattent.value === ""){
+            if (pattent.value === "") {
                 pattent.setAttribute("placeholder", "Introduce la Marca");
                 pattent.style.border = "1px solid rgb(255, 0, 0)";
                 return false;
@@ -448,7 +448,7 @@ function createModalProduct(prodSelect, shop) {
         }
         if (prodSelect === 2) {
             var type = document.getElementById("typeProd");
-            if(type.value === ""){
+            if (type.value === "") {
                 type.setAttribute("placeholder", "Introduce el Tipo");
                 type.style.border = "1px solid rgb(255, 0, 0)";
                 return false;
@@ -457,13 +457,13 @@ function createModalProduct(prodSelect, shop) {
         }
         if (prodSelect === 3) {
             var rom = document.getElementById("romProd");
-            if(rom.value === ""){
+            if (rom.value === "") {
                 rom.setAttribute("placeholder", "Introduce la ROM");
                 rom.style.border = "1px solid rgb(255, 0, 0)";
                 return false;
             }
             var processor = document.getElementById("processorProd");
-            if(processor.value === ""){
+            if (processor.value === "") {
                 processor.setAttribute("placeholder", "Introduce el Procesador");
                 processor.style.border = "1px solid rgb(255, 0, 0)";
                 return false;
@@ -481,7 +481,7 @@ function createModalProduct(prodSelect, shop) {
         clearDivProducts();
         clearModalOptionProduct();
         createProducts(shop);
-        
+
     });
 
 }
@@ -944,13 +944,31 @@ function insertNewShop() {
     var name = document.getElementById("name").value;
     var address = document.getElementById("address").value;
     var tel = document.getElementById("tel").value;
-    var t = new Shop(cif, name);
-    t.address = address;
-    t.phone = tel;
-    store.addShop(t);
+    //indexedDB
+    var db;
+    var db_name = "StoreHouse13";
+    var request = indexedDB.open(db_name, 1);
+    request.onsuccess = function (event) {// si conectamos...
+        //creamos la estructura de la nueva tienda
+        var tIDB = {
+            shop:
+                { cif: cif, name: name, phone: tel, address: address },
+            products: []
+        };
+        db = event.target.result;
+        //obtenemos un objeto con las tiendas en modo lectura escritura
+        var shopTrans = db.transaction(["shops"], "readwrite");
+        var storeShop = shopTrans.objectStore("shops", { keyPath: "shop.cif" });
+        var correct = storeShop.add(tIDB); //añadimos la tienda al almacen
+        correct.onsuccess = function () { //si se añade correctamente...
+            console.log("Tienda creada Correctamente");
+            var t = new Shop(cif, name);
+            store.addShop(t);
+            createStructure();
+            clearInputsModalShop();
+        }
+    }
     insertShop.setAttribute("data-dismiss", "modal");
-    createStructure();
-    clearInputsModalShop();
 }
 function modifyShop(cif) {
     var cif = cif;
@@ -961,7 +979,6 @@ function modifyShop(cif) {
             modif[i].setAttribute("data-target", "#createTienda");
 
         }
-
         var t = new Shop();
         t = store.getShop(cif);
         var nCif = document.getElementById("cif");
@@ -977,19 +994,55 @@ function modifyShop(cif) {
             t.name = name.value;
             t.address = address.value;
             t.phone = tel.value;
+            //abrimos el almacen
+            var db;
+            var db_name = "StoreHouse13";
+            var request = indexedDB.open(db_name, 1);
+            request.onsuccess = function (event) { //en caso correcto...
+                db = event.target.result;
+                //obtenemos un objeto con las tiendas en modo lectura escritura
+                var storeShops = db.transaction(["shops"], "readwrite").objectStore("shops");
+                var oldShop = storeShops.get(nCif.value); //obtenemos la tienda especifica
+                oldShop.onsuccess = function (event) { //en el caso de acierto...
+                    //Modificamos los resultados
+                    var shop = oldShop.result;
+                    shop.shop.name = name.value;
+                    shop.shop.phone = tel.value;
+                    shop.shop.address = address.value;
+                    //añadimos los resultados al almacen
+                    var modShop = storeShops.put(shop);
+                    modShop.onsuccess = function (event) {
+                        console.log("Tienda Modificada");
+                        createStructure();
+                    }
+
+                }
+            }
         });
         insertShop.setAttribute("data-dismiss", "modal");
-        createStructure();
     }
 }
 
 function deleteShop(cif) {
     var cif = cif;
     return function () {
-        var t = new Shop();
-        t = store.getShop(cif);
-        store.removeShop(t);
-        createStructure();
+        //abrimos el almacen
+        var db;
+        var db_name = "StoreHouse13";
+        var request = indexedDB.open(db_name, 1);
+        request.onsuccess = function (event) {
+            db = event.target.result;
+             //obtenemos un objeto con las tiendas en modo lectura escritura
+            var request1 = db.transaction(["shops"], "readwrite").objectStore("shops");
+            var remShop = request1.delete(cif); //eliminamos la tienda del almacen
+            remShop.onsuccess = function (event) { //en el caso de acierto...
+                var t = new Shop();
+                t = store.getShop(cif);
+                store.removeShop(t);
+                createStructure();
+            }
+        }
+
     }
 }
 
@@ -1059,7 +1112,7 @@ function clearInputsModalLog() {
     formLogin.reset();
 }
 //window.onload = iniPopulate;
-window.setTimeout(function(){
+window.setTimeout(function () {
     iniPopulate();
     window.clearTimeout();
 }, 300);
