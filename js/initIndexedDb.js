@@ -56,6 +56,7 @@ function initIDB() {
                     var cat = new Category(categories[j].title);
                     cat.description = categories[j].description;
                     storeHouse.addProduct(shop, pro, cat);
+                    storeHouse.addQuantityProductInShop(shop, pro, products[i].stock);
                   }
 
                   break;
@@ -72,6 +73,7 @@ function initIDB() {
                     var cat = new Category(categories[j].title);
                     cat.description = categories[j].description;
                     storeHouse.addProduct(shop, pro, cat);
+                    storeHouse.addQuantityProductInShop(shop, pro, products[i].stock);
                   }
 
                   break;
@@ -88,6 +90,7 @@ function initIDB() {
                     var cat = new Category(categories[j].title);
                     cat.description = categories[j].description;
                     storeHouse.addProduct(shop, pro, cat);
+                    storeHouse.addQuantityProductInShop(shop, pro, products[i].stock);
                   }
                   break;
               }

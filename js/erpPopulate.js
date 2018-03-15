@@ -189,6 +189,8 @@ function createProducts(shop) {
         linksAddProducts.addEventListener("click", createNewProd(shop));
     }
 }
+
+//creamos un nuevo producto tanto en el almacen como en el ERP
 function createNewProd(shop) {
 
     var formProduct = document.getElementById("formProduct");
@@ -475,26 +477,142 @@ function createModalProduct(prodSelect, shop) {
         prod.image = "./images/prox.png";
         var stock = document.getElementById("stockProd");
         var cat = store.getCategory(selectCat.value);
-        store.addProduct(shop, prod, cat);
-        store.addQuantityProductInShop(shop, prod, stock.value);
+
+        /***
+         * INDEXED DB
+         */
+        var db;
+        var db_name = "StoreHouse13";
+        var request = indexedDB.open(db_name, 1);
+        request.onsuccess = function (event) {
+            db = event.target.result;
+            var almacenShops = db.transaction(["shops"], "readwrite");
+            var newProd = almacenShops.objectStore("shops");
+            var request = newProd.get(shop.cif);
+            request.onsuccess = function (event) {
+                var nShop = event.target.result;
+                if (prodSelect === 1) {
+                    var pro = {
+                        product: {
+                            name: name.value,
+                            price: price.value,
+                            inchs: inchs.value,
+                            pattent: pattent.value,
+                            tax: 0.21,
+                            description: descript.value,
+                            image: "./images/prox.png",
+                            tProduct: "Screen"
+                        },
+                        categories: [{
+                            title: cat.title,
+                            description: cat.description
+                        }],
+                        stock: stock.value
+                    };
+                    var insertProd = nShop.products.push(pro);
+
+                }
+                if (prodSelect === 2) {
+                    var pro = {
+                        product: {
+                            name: name.value,
+                            price: price.value,
+                            type: type.value,
+                            tax: 0.21,
+                            description: descript.value,
+                            image: "./images/prox.png",
+                            tProduct: "GraficCard"
+                        },
+                        categories: [{
+                            title: cat.title,
+                            description: cat.description
+                        }],
+                        stock: stock.value
+                    };
+                    var insertProd = nShop.products.push(pro);
+                }
+                if (prodSelect === 3) {
+                    var pro = {
+                        product: {
+                            name: name.value,
+                            price: price.value,
+                            rom: rom.value,
+                            processor: processor.value,
+                            tax: 0.21,
+                            description: descript.value,
+                            image: "./images/prox.png",
+                            tProduct: "Computer"
+                        },
+                        categories: [{
+                            title: cat.title,
+                            description: cat.description
+                        }],
+                        stock: stock.value
+                    };
+                    var insertProd = nShop.products.push(pro);
+                }
+
+
+
+                console.log("Producto Insertado");
+                var insertProdu = newProd.put(nShop);
+                store.addProduct(shop, prod, cat);
+                store.addQuantityProductInShop(shop, prod, stock.value);
+                clearDivProducts();
+                clearModalOptionProduct();
+                createProducts(shop);
+
+                insertProdu.onerror = function (event) {
+                    console.error(event);
+                };
+            }
+        }
+
+
         insertarProd.setAttribute("data-dismiss", "modal");
-        clearDivProducts();
-        clearModalOptionProduct();
-        createProducts(shop);
+
 
     });
 
 }
-
+//Eliminamos un producto tanto en el almacen como en el ERP
 function removeProd(prod, shop) {
     var prod = prod;
     var shop = shop;
     return function () {
-        store.removeProduct(prod);
-        clearDivProducts();
-        createProducts(shop);
+
+        /***
+         * INDEXED DB
+         */
+        var db;
+        var db_name = "StoreHouse13";
+        var request = indexedDB.open(db_name, 1);
+        request.onsuccess = function (event) {
+            db = event.target.result;
+            var almacenShops = db.transaction(["shops"], "readwrite");
+            var delProd = almacenShops.objectStore("shops");
+            var request = delProd.get(shop.cif);
+            request.onsuccess = function (event) {
+                var nShop = event.target.result;
+                var i = nShop.products.findIndex(function (element) {
+                    return element.product.name == prod.name;
+                });
+                if (i != -1) {
+                    nShop.products.splice(i, 1);
+                    var deleted = delProd.put(nShop);
+
+                    console.log("Se ha eliminado un producto.");
+                    store.removeProduct(prod);
+                    clearDivProducts();
+                    createProducts(shop);
+                }
+            }
+        }
+
     }
+
 }
+
 
 function productShopPopulate(product, shopPopu) {
     var shop = shopPopu;
@@ -669,7 +787,7 @@ function globalProductPopulate(shop, product) {
         var bBack = document.createElement("input");
 
         pStock.setAttribute("name", stock);
-        pStock.innerText = "Disponible en '" + StoreHouse.wHouse + "': " + stock + " unidades";
+        pStock.innerText = "Disponible en '" + store.wHouse + "': " + stock + " unidades";
         pDescrip.innerText = "Descripcion: \n" + prod.description;
         bBack.setAttribute("type", "submit");
         bBack.setAttribute("value", "volver");
@@ -781,12 +899,12 @@ function menuCategoryShopPopulate(shop) {
             catN.setAttribute("data-toggle", "modal");
             catN.setAttribute("data-target", "#categories");
             var insertCategory = document.getElementById("insertarCat");
-            insertCategory.addEventListener("click", aniadirCat);
+            insertCategory.addEventListener("click", aniadirCat(shop));
 
         });
     }
 }
-
+//modificamos una categoria tanto en el almacen como en el ERP
 function modifCategory(category) {
     var category = category;
     return function () {
@@ -827,7 +945,7 @@ function modifCategory(category) {
 
     }
 }
-
+//borramos una categoria. tanto en el almacen como en el ERP
 function removeCat(shop, category) {
     var category = category;
     var shop = shop;
@@ -837,19 +955,33 @@ function removeCat(shop, category) {
         var request = indexedDB.open(db_name, 1);
         request.onsuccess = function (event) {
             db = event.target.result;
-            var storeCats = db.transaction(["categories"], "readwrite").objectStore("categories");
-            //var oldCat = storeCats.delete(category.title); //obtenemos la categoria especifica
-            oldCat.onsuccess = function (event) {
-                /**TERMINAR YA QUE NO HAY QUE BORRARLO DEL ALMACEN 
-                 * SI NO DE CADA PRODUCTO DENTRO DEL ALMACEN SHOPS
-                 */
+            var almacenShops = db.transaction(["shops"], "readwrite");
+            var delProd = almacenShops.objectStore("shops");
+            var request = delProd.get(shop.cif);
+            request.onsuccess = function (event) {
+                var nShop = event.target.result;
+                var products = nShop.products;
+                for (const i in products) {
+                    var j = products[i].categories.findIndex(function (element) {
+                        return element.title == category.title;
+                    });
+
+                    if (j != -1) {
+                        products[i].categories.splice(i, 1);
+                        var deleted = delProd.put(nShop);
+                        store.removeCategory(shop, category);
+
+                        clearMainCont();
+                        createShopPopulate(shop);
+                    }
+                }
             }
         }
     }
 }
 
-//añadimos categorias.
-function aniadirCat() {
+//añadimos categorias tanto en el almacen como en el ERP.
+function aniadirCat(shop) {
     var insertCategory = document.getElementById("insertarCat");
     var title = document.getElementById("Title").value;
     var descript = document.getElementById("descript").value;
@@ -868,6 +1000,7 @@ function aniadirCat() {
             var category = new Category(title);
             category.description = descript;
             store.addCategory(category);
+            //menuCategoryShopPopulate(shop);
             clearInputsModalCategory();
         }
     }
@@ -976,7 +1109,7 @@ function removeMenuDrop() {
     divDrop.parentElement.removeChild(divDrop);
 }
 
-
+//insertamos una tienda tanto en el almacen como en el ERP
 function insertNewShop() {
     var divCif = document.getElementById("divCif");
     var divName = document.getElementById("divName");
@@ -1010,6 +1143,8 @@ function insertNewShop() {
     }
     insertShop.setAttribute("data-dismiss", "modal");
 }
+
+//Modificamos una tienda tanto en el almacen como en el ERP
 function modifyShop(cif) {
     var cif = cif;
     return function () {
@@ -1062,7 +1197,7 @@ function modifyShop(cif) {
         insertShop.setAttribute("data-dismiss", "modal");
     }
 }
-
+//Borramos una tienda tanto en el almacen como en el ERP
 function deleteShop(cif) {
     var cif = cif;
     return function () {

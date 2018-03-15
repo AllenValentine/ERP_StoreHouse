@@ -60,3 +60,7 @@ Datos creados en el Almacen y obtenidos para crear el ERP inicial
 Creamos, Eliminamos y Modificamos las tiendas tanto en el almacen como en el ERP
 Creamos y Modificamos Categorias, falta Borrar Categorias
 Falta Crear y Eliminar productos
+
+Practica 8 - Indexed DB 1.5.3
+
+Practica finalizada 

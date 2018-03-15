@@ -24,7 +24,7 @@ function Category(title = "Anon") {
             return pr_title;
         },
         set: function (title = "Anonimous") {
-            title = title.trim();
+            
             if (title === 'undefined' || title === 'Anon') {
                 throw new EmptyValueException("title");
             }

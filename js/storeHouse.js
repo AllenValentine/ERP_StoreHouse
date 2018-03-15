@@ -366,7 +366,7 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
                 }
 
                 function compareElements(element) {
-                    return (element.product.serialNumber == product.serialNumber);
+                    return (element.product.name == product.name);
                 }
                 
                 return shopProduct.findIndex(compareElements);
