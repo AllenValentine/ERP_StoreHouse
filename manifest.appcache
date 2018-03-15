@@ -3,6 +3,7 @@ CACHE MANIFEST
 # v1 15-03-2018
 # manifiesto Practica 8 - IndexedDB
 
+CACHE:
 css/
 css/micss.css
 images/
@@ -21,3 +22,5 @@ images/shop3.png
 images/shop4.png
 images/shop5.png
 images/shop6.png
+
+https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css
