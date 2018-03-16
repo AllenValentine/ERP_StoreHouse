@@ -64,3 +64,7 @@ Falta Crear y Eliminar productos
 Practica 8 - Indexed DB 1.5.3
 
 Practica finalizada 
+
+Practica 9 - Comunicacion asincrona 1.6.0
+Ejercicio 1 Finalizado
+Ejercicio 2 Finalizado

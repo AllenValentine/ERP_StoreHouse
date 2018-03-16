@@ -37,11 +37,11 @@ function initIDB() {
             storeHouse.addShop(shop);
 
             var products = cursor.value.products;
-            
+
             for (const i in products) {
-              
+
               switch (products[i].product.tProduct) {
-               
+
                 case "Screen":
                   var pro = new Screens(
                     products[i].product.name,
@@ -50,7 +50,7 @@ function initIDB() {
                     products[i].product.pattent
                   );
                   pro.description = products[i].product.description,
-                  pro.image = products[i].product.image
+                    pro.image = products[i].product.image
                   var categories = products[i].categories;
                   for (const j in categories) {
                     var cat = new Category(categories[j].title);
@@ -67,7 +67,7 @@ function initIDB() {
                     products[i].product.type
                   );
                   pro.description = products[i].product.description,
-                  pro.image = products[i].product.image
+                    pro.image = products[i].product.image
                   var categories = products[i].categories;
                   for (const j in categories) {
                     var cat = new Category(categories[j].title);
@@ -84,7 +84,7 @@ function initIDB() {
                     products[i].product.processor
                   );
                   pro.description = products[i].product.description,
-                  pro.image = products[i].product.image
+                    pro.image = products[i].product.image
                   var categories = products[i].categories;
                   for (const j in categories) {
                     var cat = new Category(categories[j].title);
@@ -104,9 +104,6 @@ function initIDB() {
     }
   }
 
-
-
-
   /**COMPROBACIONES */
   /*function mostrarIterators(itr) {
       var item = itr.next();
@@ -117,21 +114,42 @@ function initIDB() {
   }
   
   window.onload = init; */
-  //si la no esta creada se ejecuta el onupgradeneeded y creamos los almacenes de tiendas y categorias
+  //si no esta creada se ejecuta el onupgradeneeded y creamos los almacenes de tiendas y categorias
+
   request.onupgradeneeded = function (event) {
     console.log("onupgradeNeeded");
     db = event.target.result;
 
     var storeShop = db.createObjectStore("shops", { keyPath: "shop.cif" });
     storeShop.createIndex("name", "shop.name", { unique: false });
-    for (var i in shops) {
-      storeShop.add(shops[i]);
-    }
     var storeCategory = db.createObjectStore("categories", { keyPath: "title" });
-    for (var i in categories) {
-      storeCategory.add(categories[i]);
-    }
-  }
+    
+    var categories = new XMLHttpRequest();
+    categories.onreadystatechange = function () {
+      if (this.readyState === 4 && this.status === 200) {
+        var category = JSON.parse(this.responseText);
+        for (var i in category.categories) {
+          storeCategory.add(category.categories[i]);
+        }
+      }
 
+    }
+    categories.open("GET", "categories.json", false);
+    categories.send();
+
+    var shops = new XMLHttpRequest();
+    shops.onreadystatechange = function () {
+      if (this.readyState === 4 && this.status === 200) {
+        var shop = JSON.parse(this.responseText);
+        for (var i in shop.shops) {
+          storeShop.add(shop.shops[i]);
+        }
+      }
+
+    }
+    shops.open("GET", "shops.json", false);
+    shops.send();
+
+  }
 }
 

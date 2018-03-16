@@ -1,0 +1,10 @@
+{"categories" : [
+  {"title": "0Default", "description": "Categorias Por Defecto"},
+  {"title": "Monitores", "description": "Los mejores monitores del mercado"},
+  {"title": "Tarjetas Graficas", "description": "Las tarjetas Graficas mas economicas"},
+  {"title": "Ordenadores", "description": "Los ordenadores mas completos"},
+  {"title": "Samsung", "description": "Productos Samsung"},
+  {"title": "Asus", "description": "Productos Asus" },
+  {"title": "Lenovo", "description": "Productos Lenovo"},
+  {"title": "MSI", "description": "Productos MSI"}
+]}
