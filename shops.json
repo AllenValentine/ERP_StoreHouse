@@ -7,8 +7,8 @@
         "phone": "926212325",
         "address": "Calle General",
         "coords": {
-          "longitud": 1,
-          "latitud": 1
+          "longitud": -3.9207610224391374,
+          "latitud": 38.990573027688704
         }
       },
       "products": [
@@ -147,10 +147,10 @@
         "cif": "1111111AAAAAAA",
         "name": "LaTiendaEnTuCasa",
         "phone": "666111222",
-        "address": "Calle Tienda 2",
+        "address": "Calle Tienda 1",
         "coords": {
-          "longitud": 2,
-          "latitud": 2
+          "longitud": -3.944426258512408,
+          "latitud": 38.97948216195008
         }
       },
       "products": [
@@ -249,8 +249,8 @@
         "phone": "666333444",
         "address": "Calle Tienda 2",
         "coords": {
-          "longitud": 3,
-          "latitud": 3
+          "longitud": -3.921772771179917,
+          "latitud": 38.988025186542
         }
       },
       "products": [
@@ -342,8 +342,8 @@
         "phone": "666555777",
         "address": "Calle Tienda 3",
         "coords": {
-          "longitud": 4,
-          "latitud": 4
+          "longitud": -3.928587385371202,
+          "latitud": 38.98630725581702
         }
       },
       "products": [

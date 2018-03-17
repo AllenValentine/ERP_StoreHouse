@@ -68,3 +68,6 @@ Practica finalizada
 Practica 9 - Comunicacion asincrona 1.6.0
 Ejercicio 1 Finalizado
 Ejercicio 2 Finalizado
+
+Practica 10 - Integracion de Componentes 1.7.1
+Ejercicio 1 Finalizado
