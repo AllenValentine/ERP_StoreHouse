@@ -177,6 +177,7 @@ function createShopPopulate(shop) {
 }
 function createProducts(shop) {
     var rowProducts = document.getElementById("contentProducts");
+    var dropProducts = document.getElementById("dropProduct");
     var itr = store.getShopProducts(shop);
     var item = itr.next();
     var divProduct, imgProduct, linkProduct, names;
@@ -185,14 +186,21 @@ function createProducts(shop) {
         imgProduct = document.createElement("img");
         imgProduct.setAttribute("src", item.value.image);
         imgProduct.setAttribute("alt", "producto");
+        imgProduct.setAttribute("id", item.value.name + "/" + shop.cif);
+        imgProduct.setAttribute("draggable", "true");
+        if (document.cookie.length > 0) {
+            imgProduct.addEventListener("dragstart", function(event){               
+                event.dataTransfer.setData("text", event.target.id);
+            });
+        }
         linkProduct = document.createElement("a");
         linkProduct.setAttribute("href", "#");
         linkProduct.appendChild(imgProduct);
         names = document.createElement("h4");
         names.innerText = item.value.name;
         linkProduct.appendChild(names);
-        divProduct.setAttribute("id", item.value.name);
         divProduct.setAttribute("class", "col-md-4 text-center allProduct");
+
         divProduct.appendChild(linkProduct);
         rowProducts.appendChild(divProduct);
 
@@ -217,6 +225,8 @@ function createProducts(shop) {
             divProduct.appendChild(delet);
 
             delet.addEventListener("click", removeProd(item.value, shop));
+            dropProducts.addEventListener("dragover", allowDropProduct);
+            dropProducts.addEventListener("drop", dropProduct);
 
         }
         item = itr.next();
@@ -247,6 +257,42 @@ function createProducts(shop) {
         optionModalProducts.setAttribute("id", "options");
         formProduct.appendChild(optionModalProducts);
         linksAddProducts.addEventListener("click", createNewProd(shop));
+    }
+}
+
+function removeProdDragDrop(data) {
+    var data = data;
+    debugger;
+    var ProductToRemove = data.split("/");
+    var prod = ProductToRemove[0];
+    var shop = ProductToRemove[1];
+    var shop = store.getShop(shop);
+    console.log(shop);
+    var db;
+    var db_name = "StoreHouse13";
+    var request = indexedDB.open(db_name, 1);
+    request.onsuccess = function (event) {
+        db = event.target.result;
+        var almacenShops = db.transaction(["shops"], "readwrite");
+        var delProd = almacenShops.objectStore("shops");
+        var request = delProd.get(shop.cif);
+        request.onsuccess = function (event) {
+            var nShop = event.target.result;
+            var i = nShop.products.findIndex(function (element) {
+                return element.product.name === prod;
+            });
+            if (i != -1) {
+                nShop.products.splice(i, 1);
+                var deleted = delProd.put(nShop);
+
+                console.log("Se ha eliminado un producto.");
+                var product = store.getProduct(shop, prod);
+                store.removeProduct(product);
+                clearDivProducts();
+                createProducts(shop);
+
+            }
+        }
     }
 }
 

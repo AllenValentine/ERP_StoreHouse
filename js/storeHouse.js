@@ -167,7 +167,6 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
                 return pr_shops.length;
             }
             this.getShop = function (cif) {
-                //debugger;
                 for (let i = 0; i < pr_shops.length; i++) {
                     if(cif === pr_shops[i].shops.cif){
                         return pr_shops[i].shops;
@@ -175,6 +174,20 @@ var StoreHouse = (function () {  //La funcion anonima devuelve un método getIns
                     
                 }
                 
+            }
+
+            this.getProduct = function(shop, prod){
+                for (let i = 0; i < pr_shops.length; i++) {
+                    if(shop.cif === pr_shops[i].shops.cif){
+                        for (let j = 0; j < pr_shops[i].products.length; j++) {
+                            if(prod === pr_shops[i].products[j].product.name){
+                                return pr_shops[i].products[j].product;
+                            }
+                            
+                        }
+                    }
+                    
+                }
             }
 
             //esta funcion devuelve la posicoin de la tienda en el array,o de las tiendas, o 1 si no existe

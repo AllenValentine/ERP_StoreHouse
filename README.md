@@ -71,3 +71,7 @@ Ejercicio 2 Finalizado
 
 Practica 10 - Integracion de Componentes 1.7.1
 Ejercicio 1 Finalizado
+
+Practica 10 - Integracion de Componentes 1.7.2
+Ejercicio 1 Finalizado
+Ejercicio 3 Finalizado
