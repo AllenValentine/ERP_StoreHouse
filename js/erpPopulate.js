@@ -4,6 +4,7 @@ initIDB();
 var shopContent = document.getElementById("main-content");
 var store = StoreHouse.getInstance();
 //usuario y contraseña
+
 var cookie = getCookie("username");
 var usu = "prueba";
 var passw = "prueba";
@@ -71,50 +72,42 @@ function guardarEstado() {
 
 }
 
+
 function iniPopulate() {
     clearHeader();
     clearMenuContent();
-
-
-    var header = document.getElementById("nombreErp");
-    var title = document.createElement("img");
-    title.setAttribute("src", "images/logo.png");
-    title.setAttribute("alt", "logo");
-    header.appendChild(title);
+    // mod jquery
+    var header = $("#nombreErp");
+    var img = $('<img>', {src:"images/logo.png", alt:"logo"});
+    header.append(img);
     checkUser(usu, passw);
     if (document.cookie.length > 0) {
-        var conf = document.createElement("a");
-        var closeSession = document.createElement("a");
-        var usr = document.createElement("span");
-        conf.setAttribute("href", "#");
-        closeSession.setAttribute("href", "#");
-        conf.setAttribute("class", "btn btn-lg pull-right");
-        closeSession.setAttribute("class", "closeSession pull-left");
-        conf.setAttribute("id", "configuracion");
-        usr.setAttribute("class", "usuario pull-left");
-        usr.innerText = "Usuario: " + usu;
-        conf.innerText = "Configuracion";
-        closeSession.innerText = "Cerrar Sesion";
-        header.appendChild(usr);
-        header.appendChild(conf);
-        header.appendChild(closeSession);
+        var conf = $('<a></a>', {href:"#", class:"configuration btn btn-lg pull-right"}).text("Configuracion");
+        var closeSession = $('<a></a>', {href:"#", class:"closeSession pull-left"}).text("Cerrar Sesión");
+        var usr = $('<span></span>', {href:"#", class:"usuario pull-left"}).text("Usuario: " + usu);
+        header.append(conf);
+        header.append(closeSession);
+        header.append(usr);
+
         clearMainCont();
-        conf.addEventListener("click", menuConf);
-        closeSession.addEventListener("click", cleanCookie);
-
-
+        $(".configuration").click(menuConf);
+        // $(".configuration").click(function(ev){
+        //     ev.preventDefault();
+        //     menuConf()
+        // })
+        $(".closeSession").click(cleanCookie);
+            
+        
     } else {
-        var user = document.createElement("a");
-        user.setAttribute("href", "#");
-        user.setAttribute("class", "btn btn-lg pull-right");
-        user.setAttribute("id", "iniSesion");
-        user.setAttribute("data-toggle", "modal");
-        user.setAttribute("data-target", "#myModal");
-
-        user.innerText = "Iniciar Sesion";
-
-        header.appendChild(user);
+        var user = $('<a></a>', {href:"#", id:"iniSesion", class:"btn btn-lg pull-right"}).text("Iniciar Sesion");
+        header.append(user);
+        $(document).on("click", "#iniSesion", function (ev) {
+            ev.preventDefault();
+            $('#myModal').modal();
+        })
     }
+    // fin mod
+    
 
     createStructure();
     clearInputsModalLog();
@@ -124,37 +117,30 @@ function createStructure() {
     clearMainCont();
     var itr = store.shops;
     var item = itr.next();
-    var divShops, imgShops, divShopsContent, linksShops, names;
-    var imgShop = "./images/shop.png";
     var i = 1;
 
-
     while (!item.done) {
-        divShops = document.createElement("div");
-        // FOTOS
+        // mod jQuery
+        var divShops = $('<div></div>',{class:"col-md-3 text-center shops", id:item.value.cif});
+        var linksShops = $('<a></a>', {href:"#"});
+        var imgShops = $('<img/>', {src:"./images/shop" + (i++) + ".png", alt:"tiendas"});
+        var names = $('<h2></h2>').text(item.value.name);
 
-        imgShops = document.createElement("img");
-        imgShops.setAttribute("src", "./images/shop" + (i++) + ".png");
-        imgShops.setAttribute("alt", "tiendas");
-        linksShops = document.createElement("a");
-        linksShops.setAttribute("href", "#");
-        linksShops.appendChild(imgShops);
-        names = document.createElement("h2");
-        names.innerText = item.value.name;
-        linksShops.appendChild(names);
-        divShops.setAttribute("id", item.value.cif);
-        divShops.setAttribute("class", "col-md-3 text-center shops");
-        divShops.appendChild(linksShops);
-        shopContent.appendChild(divShops);
+        linksShops.append(imgShops);
+        linksShops.append(names);
+        divShops.append(linksShops);
+        linksShops.click(shopPopulate(item.value));
 
-        linksShops.addEventListener("click", shopPopulate(item.value));
+        $("#main-content").append(divShops);
         item = itr.next();
+        // fin mod
     }
-
 }
 
 
+
 function shopPopulate(shop) {
+    var shop = shop;
     return function () {
         clearMainCont();
         shopsMenusPopulate(shop);
@@ -164,105 +150,93 @@ function shopPopulate(shop) {
 }
 
 function createShopPopulate(shop) {
-    var divAllProducts, rowProducts;
-    divAllProducts = document.createElement("div");
-    divAllProducts.setAttribute("class", "col-md-9");
-    divAllProducts.setAttribute("id", "divAllProducts");
-    rowProducts = document.createElement("div");
-    rowProducts.setAttribute("class", "row");
-    rowProducts.setAttribute("id", "contentProducts");
-    divAllProducts.appendChild(rowProducts);
-    shopContent.appendChild(divAllProducts);
+    var divAllProducts = $('<div></div>', {class:"col-md-9",id:"divAllProducts"});
+    var rowProducts = $('<div></div>', {class:"row",id:"contentProducts"});
+    divAllProducts.append(rowProducts);
+    $("#main-content").append(divAllProducts);
     createProducts(shop);
 }
 function createProducts(shop) {
-    var rowProducts = document.getElementById("contentProducts");
-    var dropProducts = document.getElementById("dropProduct");
+    var rowProducts = $("#contentProducts");
+    var dropProducts = $("dropProduct");
     var itr = store.getShopProducts(shop);
     var item = itr.next();
-    var divProduct, imgProduct, linkProduct, names;
     while (!item.done) {
-        divProduct = document.createElement("div");
-        imgProduct = document.createElement("img");
-        imgProduct.setAttribute("src", item.value.image);
-        imgProduct.setAttribute("alt", "producto");
-        imgProduct.setAttribute("id", item.value.name + "/" + shop.cif);
-        imgProduct.setAttribute("draggable", "true");
+        var divProduct = $('<div></div>', {class:"col-md-4 text-center allProduct"});
+        var imgProduct = $('<img/>', {src: item.value.image,alt: "producto", id:item.value.name + "/" + shop.cif, draggable:"true"});
+        var linkProduct = $('<a></a>', {href:"#"});
+        var names = $('<h4></h4>').text(item.value.name);
+        linkProduct.append(imgProduct);
+        linkProduct.append(names);
+        divProduct.append(linkProduct);
+        rowProducts.append(divProduct);
         if (document.cookie.length > 0) {
-            imgProduct.addEventListener("dragstart", function(event){               
+            imgProduct.on("dragstart", function(event){               
                 event.dataTransfer.setData("text", event.target.id);
             });
         }
-        linkProduct = document.createElement("a");
-        linkProduct.setAttribute("href", "#");
-        linkProduct.appendChild(imgProduct);
-        names = document.createElement("h4");
-        names.innerText = item.value.name;
-        linkProduct.appendChild(names);
-        divProduct.setAttribute("class", "col-md-4 text-center allProduct");
-
-        divProduct.appendChild(linkProduct);
-        rowProducts.appendChild(divProduct);
-
-        linkProduct.addEventListener("click", productShopPopulate(item.value, shop));
-
+        linkProduct.click(productShopPopulate(item.value, shop));
 
         if (document.cookie.length > 0) {
-            var delet = document.createElement("a");
+            var delet = $('<a></a>', { href:"#", class:"delete"});
+            var spanDelet = $('<span></span>', {href:"#", class:"glyphicon glyphicon-fire"});
+
+            delet.append(spanDelet);
+            divProduct.append(delet);
+            /*var delet = document.createElement("a");
             var spanDelet = document.createElement("span");
             delet.setAttribute("href", "#");
             delet.setAttribute("class", "delete");
 
-            spanDelet.setAttribute("class", "glyphicon glyphicon-fire");
-            delet.style.backgroundColor = "rgb(242, 69, 69)";
-            delet.style.color = "white";
+            spanDelet.setAttribute("class", "glyphicon glyphicon-fire");*/
+            delet.css("background-color","rgb(242, 69, 69)");
+            delet.css("color","rgb(255, 255, 255)");
+            delet.css("display","inline-block");
+            delet.width("40px");
+            delet.height("40px");
+            delet.css("borderRadius","10px");
+            spanDelet.css("paddingTop","10px");
+            /*delet.style.color = "white";
             delet.style.display = "inline-block";
             delet.style.width = "40px";
             delet.style.height = "40px";
             delet.style.borderRadius = "10px";
             spanDelet.style.paddingTop = "10px";
-            delet.appendChild(spanDelet);
+            /*delet.appendChild(spanDelet);
             divProduct.appendChild(delet);
+*/
 
-            delet.addEventListener("click", removeProd(item.value, shop));
-            dropProducts.addEventListener("dragover", allowDropProduct);
-            dropProducts.addEventListener("drop", dropProduct);
+
+            delet.click(removeProd(item.value, shop));
+            dropProducts.on("dragover", allowDropProduct);
+            dropProducts.on("drop", dropProduct);
 
         }
         item = itr.next();
     }
     if (document.cookie.length > 0) {
-        var divProduct, imgProduct, linksAddProducts, names;
-        divProduct = document.createElement("div");
-        divProduct.setAttribute("id", "newProd");
+        var divProduct = $('<div></div>', {class:"col-md-4 text-center newShop", id:"newProd"}); 
+        var imgProduct = $('<img/>', {src: "./images/aniadirTienda.png", alt: "nueva tienda"});
+        var linksAddProducts = $('<a></a>', {href:"#", class: "newProduct"});
+        linksAddProducts.attr("data-toggle", "modal");
+        linksAddProducts.attr("data-target","#products");
+        var names = $('<h4></h4>').text("Añadir");
+      
+        linksAddProducts.append(imgProduct);
+        linksAddProducts.append(names);
+        divProduct.append(linksAddProducts);
+        rowProducts.append(divProduct);
 
-        imgProduct = document.createElement("img");
-        imgProduct.setAttribute("src", "./images/aniadirTienda.png");
-        imgProduct.setAttribute("alt", "tiendas");
-        linksAddProducts = document.createElement("a");
-        linksAddProducts.setAttribute("href", "#");
-        linksAddProducts.setAttribute("data-toggle", "modal");
-        linksAddProducts.setAttribute("data-target", "#products");
-        linksAddProducts.appendChild(imgProduct);
-        names = document.createElement("h2");
-        names.innerText = "Añadir";
-        linksAddProducts.appendChild(names);
-        divProduct.setAttribute("class", "col-md-3 text-center newShop");
-        divProduct.appendChild(linksAddProducts);
-        rowProducts.appendChild(divProduct);
-        var mainModal = document.createElement("div");
-        mainModal.setAttribute("id", "mainModalProd");
-        formProduct.appendChild(mainModal);
-        var optionModalProducts = document.createElement("div");
-        optionModalProducts.setAttribute("id", "options");
-        formProduct.appendChild(optionModalProducts);
-        linksAddProducts.addEventListener("click", createNewProd(shop));
+        var mainModal = $('<div></div>', {id:"mainModalProd"});
+        $("#formProduct").append(mainModal);
+        var optionModalProducts = $('<div></div>', {id:"options"});
+        $("#formProduct").append(optionModalProducts);
+        linksAddProducts.click(createNewProd(shop));
     }
 }
 
 function removeProdDragDrop(data) {
     var data = data;
-    debugger;
     var ProductToRemove = data.split("/");
     var prod = ProductToRemove[0];
     var shop = ProductToRemove[1];
@@ -296,235 +270,136 @@ function removeProdDragDrop(data) {
     }
 }
 
+
 //creamos un nuevo producto tanto en el almacen como en el ERP
 function createNewProd(shop) {
 
-    var formProduct = document.getElementById("formProduct");
-    var mainModal = document.getElementById("mainModalProd");
-    var optionModalProducts = document.getElementById("options");
-    var h4 = document.getElementById("tiend");
-    h4.innerText = "Tienda: " + shop.name;
+    var formProduct = $("#formProduct");
+    var mainModal = $("#mainModalProd");
+    var optionModalProducts = $("#options");
+    var h4 = $("#tiend").text("Tienda"+shop.name);
 
     clearModalformProd();
-    var divSelect = document.createElement("div");
-    divSelect.setAttribute("class", "form-group");
-    divSelect.setAttribute("id", "divSelect");
+    var divSelect = $('<div></div>', {class: "form-group", id:"divSelect"});
+    var labelSelect = $('<label></label>', {for:"prod"}).text("Producto ");
+    var prodSelect = $('<select></select>', {name:"producto", id:"prod"});
+    var optionProd = $('<option></option>', {value:""});
+    var optionProd1 = $('<option></option>', {value:"1"}).text("Monitores");
+    var optionProd2 = $('<option></option>', {value:"2"}).text("Tarjeta Grafica");
+    var optionProd3 = $('<option></option>', {value:"3"}).text("Ordenador");
 
-    var labelSelect = document.createElement("label");
-    labelSelect.setAttribute("for", "prod");
-    labelSelect.innerText = "Producto ";
-    var prodSelect = document.createElement("select");
-    prodSelect.setAttribute("name", "producto");
-    prodSelect.setAttribute("id", "prod");
-    var optionProd = document.createElement("option");
-    optionProd.setAttribute("value", "");
-    optionProd.innerText = "";
-    var optionProd1 = document.createElement("option");
-    optionProd1.setAttribute("value", "1");
-    optionProd1.innerText = "Monitores";
-    var optionProd2 = document.createElement("option");
-    optionProd2.setAttribute("value", "2");
-    optionProd2.innerText = "Tarjeta Grafica";
-    var optionProd3 = document.createElement("option");
-    optionProd3.setAttribute("value", "3");
-    optionProd3.innerText = "Ordenador";
-    prodSelect.appendChild(optionProd);
-    prodSelect.appendChild(optionProd1);
-    prodSelect.appendChild(optionProd2);
-    prodSelect.appendChild(optionProd3);
-    divSelect.appendChild(labelSelect);
-    divSelect.appendChild(prodSelect);
-    mainModal.appendChild(divSelect);
+    prodSelect.append(optionProd);
+    prodSelect.append(optionProd1);
+    prodSelect.append(optionProd2);
+    prodSelect.append(optionProd3);
+    divSelect.append(labelSelect);
+    divSelect.append(prodSelect);
+    mainModal.append(divSelect);
+    var divName = $('<div></div>', {class: "form-group", id:"divName"});
+    var labelName = $('<label></label>', {for:"nameProd"}).text("Nombre ");
+    var inputName = $('<input>', {type:"text", class: "form-control", id: "nameProd", placeholder:"Nombre Producto"});
+    divName.append(labelName);
+    divName.append(inputName);
+    mainModal.append(divName);
+    
+    var divPrice = $('<div></div>', {class: "form-group", id:"divPrice"});
+    var labelPrice = $('<label></label>', {for:"priceProd"}).text("Precio ");
+    var inputPrice = $('<input>', {type:"text", class: "form-control", id: "priceProd", placeholder:"Precio Producto"});
+    divPrice.append(labelPrice);
+    divPrice.append(inputPrice);
+    mainModal.append(divPrice);
+    var typeProd = $("#prod");
 
-
-    var divName = document.createElement("div");
-    divName.setAttribute("class", "form-group");
-    divName.setAttribute("id", "divName");
-    var labelName = document.createElement("label");
-    labelName.setAttribute("for", "nameProd");
-    labelName.innerText = "Nombre";
-    var inputName = document.createElement("input");
-    inputName.setAttribute("type", "text");
-    inputName.setAttribute("class", "form-control");
-    inputName.setAttribute("id", "nameProd");
-    inputName.setAttribute("placeholder", "Nombre Producto");
-    divName.appendChild(labelName);
-    divName.appendChild(inputName);
-    mainModal.appendChild(divName);
-
-    var divPrice = document.createElement("div");
-    divPrice.setAttribute("class", "form-group");
-    divPrice.setAttribute("id", "divPrice");
-    var labelPrice = document.createElement("label");
-    labelPrice.setAttribute("for", "priceProd");
-    labelPrice.innerText = "Precio";
-    var inputPrice = document.createElement("input");
-    inputPrice.setAttribute("type", "text");
-    inputPrice.setAttribute("class", "form-control");
-    inputPrice.setAttribute("id", "priceProd");
-    inputPrice.setAttribute("placeholder", "Precio Producto");
-    divPrice.appendChild(labelPrice);
-    divPrice.appendChild(inputPrice);
-    mainModal.appendChild(divPrice);
-    var typeProd = document.getElementById("prod");
-
-    typeProd.addEventListener("change", valorOptionProd(shop));
+    typeProd.on('change', valorOptionProd(shop));
 }
 
 function valorOptionProd(shop) {
 
     return function () {
         //Recogemos el value del select
-        var typeProd = document.getElementById("prod");
-        var indice = typeProd.selectedIndex;
-        var valor = typeProd.options[indice].value;
-        createModalProduct(parseInt(valor), shop);
+        console.log(this.value);
+        createModalProduct(parseInt(this.value), shop);
     }
 }
 
 function createModalProduct(prodSelect, shop) {
-    var formProduct = document.getElementById("formProduct");
-    var optionModalProducts = document.getElementById("options");
+    var formProduct = $("#formProduct");
+    var optionModalProducts = $("#options");
+
     if (prodSelect === 1) {
         clearModalOptionProduct();
-        var divInchs = document.createElement("div");
-        divInchs.setAttribute("class", "form-group");
-        divInchs.setAttribute("id", "divInchs");
-        var labelInchs = document.createElement("label");
-        labelInchs.setAttribute("for", "inchsProd");
-        labelInchs.innerText = "Pulgadas";
-        var inputInchs = document.createElement("input");
-        inputInchs.setAttribute("type", "text");
-        inputInchs.setAttribute("class", "form-control");
-        inputInchs.setAttribute("id", "inchsProd");
-        inputInchs.setAttribute("placeholder", "Pulgadas");
-        divInchs.appendChild(labelInchs);
-        divInchs.appendChild(inputInchs);
-        optionModalProducts.appendChild(divInchs);
+        var divInchs = $('<div></div>', {class: "form-group", id:"divInchs"});
+        var labelInchs = $('<label></label>', {for:"inchsProd"}).text("Pulgadas ");
+        var inputInchs = $('<input>', {type:"text", class: "form-control", id: "inchsProd", placeholder:"Pulgadas"});
+        divInchs.append(labelInchs);
+        divInchs.append(inputInchs);
+        optionModalProducts.append(divInchs);
 
-        var divPattent = document.createElement("div");
-        divPattent.setAttribute("class", "form-group");
-        divPattent.setAttribute("id", "divPattent");
-        var labelPattent = document.createElement("label");
-        labelPattent.setAttribute("for", "pattentProd");
-        labelPattent.innerText = "Marca";
-        var inputPattent = document.createElement("input");
-        inputPattent.setAttribute("type", "text");
-        inputPattent.setAttribute("class", "form-control");
-        inputPattent.setAttribute("id", "pattentProd");
-        inputPattent.setAttribute("placeholder", "Marca Producto");
-        divPattent.appendChild(labelPattent);
-        divPattent.appendChild(inputPattent);
-        optionModalProducts.appendChild(divPattent);
+        var divPattent = $('<div></div>', {class: "form-group", id:"divPattent"});
+        var labelPattent = $('<label></label>', {for:"pattentProd"}).text("Marca ");
+        var inputPattent = $('<input>', {type:"text", class: "form-control", id: "pattentProd", placeholder:"Marca Producto"});
+        divPattent.append(labelPattent);
+        divPattent.append(inputPattent);
+        optionModalProducts.append(divPattent);
     }
     if (prodSelect === 2) {
         clearModalOptionProduct();
-        var divType = document.createElement("div");
-        divType.setAttribute("class", "form-group");
-        divType.setAttribute("id", "divType");
-        var labelType = document.createElement("label");
-        labelType.setAttribute("for", "pattentProd");
-        labelType.innerText = "Tipo";
-        var inputType = document.createElement("input");
-        inputType.setAttribute("type", "text");
-        inputType.setAttribute("class", "form-control");
-        inputType.setAttribute("id", "typeProd");
-        inputType.setAttribute("placeholder", "Tipo Producto");
-        divType.appendChild(labelType);
-        divType.appendChild(inputType);
-        optionModalProducts.appendChild(divType);
+        var divType = $('<div></div>', {class: "form-group", id:"divType"});
+        var labelType = $('<label></label>', {for:"typeProd"}).text("Tipo ");
+        var inputType = $('<input>', {type:"text", class: "form-control", id: "typeProd", placeholder:"Tipo Producto"});
+        divType.append(labelType);
+        divType.append(inputType);
+        optionModalProducts.append(divType);
     }
     if (prodSelect === 3) {
         clearModalOptionProduct();
-        var divRom = document.createElement("div");
-        divRom.setAttribute("class", "form-group");
-        divRom.setAttribute("id", "divRom");
-        var labelRom = document.createElement("label");
-        labelRom.setAttribute("for", "romProd");
-        labelRom.innerText = "ROM";
-        var inputRom = document.createElement("input");
-        inputRom.setAttribute("type", "text");
-        inputRom.setAttribute("class", "form-control");
-        inputRom.setAttribute("id", "romProd");
-        inputRom.setAttribute("placeholder", "ROM");
-        divRom.appendChild(labelRom);
-        divRom.appendChild(inputRom);
-        optionModalProducts.appendChild(divRom);
+        var divRom = $('<div></div>', {class: "form-group", id:"divRom"});
+        var labelRom = $('<label></label>', {for:"romProd"}).text("ROM ");
+        var inputRom = $('<input>', {type:"text", class: "form-control", id: "romProd", placeholder:"ROM"});
+        divRom.append(labelRom);
+        divRom.append(inputRom);
+        optionModalProducts.append(divRom);
 
-        var divProcessor = document.createElement("div");
-        divProcessor.setAttribute("class", "form-group");
-        divProcessor.setAttribute("id", "divProcessor");
-        var labelProcessor = document.createElement("label");
-        labelProcessor.setAttribute("for", "processorProd");
-        labelProcessor.innerText = "Procesador";
-        var inputProcessor = document.createElement("input");
-        inputProcessor.setAttribute("type", "text");
-        inputProcessor.setAttribute("class", "form-control");
-        inputProcessor.setAttribute("id", "processorProd");
-        inputProcessor.setAttribute("placeholder", "Procesador");
-        divProcessor.appendChild(labelProcessor);
-        divProcessor.appendChild(inputProcessor);
-        optionModalProducts.appendChild(divProcessor);
+        var divProcessor = $('<div></div>', {class: "form-group", id:"divProcessor"});
+        var labelProcessor = $('<label></label>', {for:"divProcessor"}).text("Procesador ");
+        var inputProcessor = $('<input>', {type:"text", class: "form-control", id: "processorProd", placeholder:"Procesador"});
+        divProcessor.append(labelProcessor);
+        divProcessor.append(inputProcessor);
+        optionModalProducts.append(divProcessor);
     }
-    var divDescript = document.createElement("div");
-    divDescript.setAttribute("class", "form-group");
-    divDescript.setAttribute("id", "divDescript");
-    var labelDescript = document.createElement("label");
-    labelDescript.setAttribute("for", "processorProd");
-    labelDescript.innerText = "Descripcion";
-    var inputDescript = document.createElement("input");
-    inputDescript.setAttribute("type", "text");
-    inputDescript.setAttribute("class", "form-control");
-    inputDescript.setAttribute("id", "descriptProd");
-    inputDescript.setAttribute("placeholder", "Descripcion");
-    divDescript.appendChild(labelDescript);
-    divDescript.appendChild(inputDescript);
-    optionModalProducts.appendChild(divDescript);
 
-    var divSelect = document.createElement("div");
-    divSelect.setAttribute("class", "form-group");
-    divSelect.setAttribute("id", "divSelectCat");
-    optionModalProducts.appendChild(divSelect);
+    var divDescript = $('<div></div>', {class: "form-group", id:"divDescript"});
+    var labelDescript = $('<label></label>', {for:"descriptProd"}).text("Descripcion ");
+    var inputDescript = $('<input>', {type:"text", class: "form-control", id: "descriptProd", placeholder:"Descripcion"});
+    divDescript.append(labelDescript);
+    divDescript.append(inputDescript);
+    optionModalProducts.append(divDescript);
 
-    var labelSelect = document.createElement("label");
-    labelSelect.setAttribute("for", "cat");
-    labelSelect.innerText = "Categoria";
-    var catSelect = document.createElement("select");
-    catSelect.setAttribute("name", "categories");
-    catSelect.setAttribute("class", "form-control");
-    catSelect.setAttribute("id", "category");
-    divSelect.appendChild(labelSelect);
-    divSelect.appendChild(catSelect);
+    var divSelect = $('<div></div>', {class: "form-group", id:"divSelectCat"});
+    var labelSelect = $('<label></label>', {for:"cat"}).text("Categoria");
+    var catSelect = $('<select></select>', {name:"cat", id:"category"});
+    optionModalProducts.append(divSelect);
+    divSelect.append(labelSelect);
+    divSelect.append(catSelect);
     var itr = store.categories;
     var item = itr.next();
     while (!item.done) {
-        var cat = document.createElement("option");
-        cat.setAttribute("value", item.value.title);
-        cat.innerText = item.value.title;
-        catSelect.appendChild(cat);
+        var cat = $('<option></option>', {value:item.value.title}).text(item.value.title);
+        catSelect.append(cat);
         item = itr.next();
     }
-    var divStock = document.createElement("div");
-    divStock.setAttribute("class", "form-group");
-    divStock.setAttribute("id", "divStock");
-    var labelStock = document.createElement("label");
-    labelStock.setAttribute("for", "stockProd");
-    labelStock.innerText = "Stock";
-    var inputCat = document.createElement("input");
-    inputCat.setAttribute("type", "number");
-    inputCat.setAttribute("class", "form-control");
-    inputCat.setAttribute("min", "1");
-    inputCat.setAttribute("id", "stockProd");
-    divStock.appendChild(labelStock);
-    divStock.appendChild(inputCat);
-    optionModalProducts.appendChild(divStock);
+    var divStock = $('<div></div>', {class: "form-group", id:"divStock"});
+    var labelStock = $('<label></label>', {for:"stockProd"}).text("Stock ");
+    var inputShop = $('<input>', {type:"number", class: "form-control",min:1, id: "stockProd"});
+    divStock.append(labelStock);
+    divStock.append(inputShop);
+    optionModalProducts.append(divStock);
     var selectCat = document.getElementById("category");
-    selectCat.onchange = function () {
+    selectCat.addEventListener("change", function () {
         var indice = selectCat.selectedIndex;
         var valor = selectCat.options[indice].value;
 
-
-    };
+    });
     var insertarProd = document.getElementById("insertarProd");
     insertarProd.addEventListener("click", function () {
         var name = document.getElementById("nameProd");
@@ -535,21 +410,21 @@ function createModalProduct(prodSelect, shop) {
         }
         var price = document.getElementById("priceProd");
         if (price.value === "") {
-            price.setAttribute("placeholder", "Introduce el Precio");
-            price.style.border = "1px solid rgb(255, 0, 0)";
+            name.setAttribute("placeholder", "Introduce el Precio");
+            price.css("border", "1px solid rgb(255, 0, 0)");
             return false;
         }
         if (prodSelect === 1) {
             var inchs = document.getElementById("inchsProd");
             if (inchs.value === "") {
-                inchs.setAttribute("placeholder", "Introduce las Pulgadas");
-                inchs.style.border = "1px solid rgb(255, 0, 0)";
+                name.setAttribute("placeholder", "Introduce las Pulgadas");
+                name.style.border = "1px solid rgb(255, 0, 0)";
                 return false;
             }
             var pattent = document.getElementById("pattentProd");
             if (pattent.value === "") {
-                pattent.setAttribute("placeholder", "Introduce la Marca");
-                pattent.style.border = "1px solid rgb(255, 0, 0)";
+                name.setAttribute("placeholder", "Introduce la Marca");
+                name.style.border = "1px solid rgb(255, 0, 0)";
                 return false;
             }
             var prod = new Screens(name.value, price.value, inchs.value, pattent.value);
@@ -557,8 +432,8 @@ function createModalProduct(prodSelect, shop) {
         if (prodSelect === 2) {
             var type = document.getElementById("typeProd");
             if (type.value === "") {
-                type.setAttribute("placeholder", "Introduce el Tipo");
-                type.style.border = "1px solid rgb(255, 0, 0)";
+                name.setAttribute("placeholder", "Introduce el Tipo");
+                name.style.border = "1px solid rgb(255, 0, 0)";
                 return false;
             }
             var prod = new GraficCards(name.value, price.value, type.value);
@@ -566,19 +441,19 @@ function createModalProduct(prodSelect, shop) {
         if (prodSelect === 3) {
             var rom = document.getElementById("romProd");
             if (rom.value === "") {
-                rom.setAttribute("placeholder", "Introduce la ROM");
-                rom.style.border = "1px solid rgb(255, 0, 0)";
+                name.setAttribute("placeholder", "Introduce la ROM");
+                name.style.border = "1px solid rgb(255, 0, 0)";
                 return false;
             }
             var processor = document.getElementById("processorProd");
             if (processor.value === "") {
-                processor.setAttribute("placeholder", "Introduce el Procesador");
-                processor.style.border = "1px solid rgb(255, 0, 0)";
+                name.setAttribute("placeholder", "Introduce el Procesador");
+                name.style.border = "1px solid rgb(255, 0, 0)";
                 return false;
             }
             var prod = new Computer(name.value, price.value, rom.value, processor.value);
         }
-        var descript = document.getElementById("descriptProd");
+        var descript =document.getElementById("descriptProd");
         prod.descript = descript.value;
         prod.image = "./images/prox.png";
         var stock = document.getElementById("stockProd");
@@ -693,6 +568,7 @@ function removeProd(prod, shop) {
         var db;
         var db_name = "StoreHouse13";
         var request = indexedDB.open(db_name, 1);
+        debugger;
         request.onsuccess = function (event) {
             db = event.target.result;
             var almacenShops = db.transaction(["shops"], "readwrite");
@@ -728,94 +604,58 @@ function productShopPopulate(product, shopPopu) {
         shopsMenusPopulate(shop);
         menuCategoryShopPopulate(shop);
         var stock = store.getStock(shop, pro);
-        var divProduct = document.createElement("div");//contenedor General
-        divProduct.setAttribute("class", "col-md-9 product");
-        var divRow = document.createElement("div");//fila 
-        divRow.setAttribute("id", pro.name);
-        divRow.setAttribute("class", "row");
-        var divImg = document.createElement("div");
-        divImg.setAttribute("class", "col-md-6 img");
-        var divInfo = document.createElement("div");
-        divInfo.setAttribute("class", "col-md-6 productInfo");
+        var divProduct = $('<div></div>', {class:"col-md-9 product"});
+        var divRow = $('<div></div>', {class:"row", id:pro.name});
+        var divImg = $('<div></div>', {class:"col-md-6 img", id:pro.name});
+        var divInfo = $('<div></div>', {class:"col-md-6 productInfo", id:pro.name});
 
-        var pName = document.createElement("p");
-        var pPrice = document.createElement("p");
+        var pName = $('<p></p>', {name:pro.name}).text("Producto: " + pro.name + ".");
+        var pPrice = $('<p></p>', {name:pro.price}).text("Precio: " + pro.price + " € (sin IVA).");
 
-        pName.setAttribute("name", pro.name);
-        pName.innerText = "Producto: " + pro.name + ".";
-        pPrice.setAttribute("name", pro.price);
-        pPrice.innerText = "Precio: " + pro.price + " € (sin IVA).";
-
-        divInfo.appendChild(pName);
-        divInfo.appendChild(pPrice);
+        divInfo.append(pName);
+        divInfo.append(pPrice);
 
         if (pro instanceof Screens) {
-            var pInchs = document.createElement("p");
-            var pPattent = document.createElement("p");
-            pInchs.setAttribute("name", pro.inchs);
-            pInchs.innerText = "Pulgadas: " + pro.inchs + '".';
-            pPattent.setAttribute("name", pro.pattent);
-            pPattent.innerText = "Marca: " + pro.pattent + ".";
-            divInfo.appendChild(pInchs);
-            divInfo.appendChild(pPattent);
+            var pInchs = $('<p></p>', {name:pro.inchs}).text("Pulgadas: " + pro.inchs + ".");
+            var pPattent = $('<p></p>', {name:pro.pattent}).text("Marca: " + pro.pattent + ".");
+            divInfo.append(pInchs);
+            divInfo.append(pPattent);
         }
         if (pro instanceof GraficCards) {
-            var pType = document.createElement("p");
-            pType.setAttribute("name", pro.type);
-            pType.innerText = "Tipo: " + pro.type + '.';
-            divInfo.appendChild(pType);
+            var pType = $('<p></p>', {name:pro.type}).text("Tipo: " + pro.type + ".");
+            divInfo.append(pType);
         }
 
         if (pro instanceof Computer) {
-            var pRom = document.createElement("p");
-            var pProcessor = document.createElement("p");
-            pRom.setAttribute("name", pro.rom);
-            pRom.innerText = "ROM: " + pro.rom + '.';
-            pProcessor.setAttribute("name", pro.processor);
-            pProcessor.innerText = "Procesador: " + pro.processor + ".";
-            divInfo.appendChild(pRom);
-            divInfo.appendChild(pProcessor);
+            var pRom = $('<p></p>', {name:pro.rom}).text("ROM: " + pro.rom + ".");
+            var pProcessor = $('<p></p>', {name:pro.processor}).text("Procesador: " + pro.processor + ".");
+            divInfo.append(pRom);
+            divInfo.append(pProcessor);
         }
+        var pStock = $('<p></p>', {name:stock}).text("Disponible: " + stock + " unidades.");
+        var bBuy = $('<input>', {type:"submit", value:"Comprar", name:"comprar"}).text("Disponible: " + stock + " unidades.");
 
-        var pStock = document.createElement("p");
-        var bBuy = document.createElement("input");
+        divInfo.append(pStock);
+        divInfo.append(bBuy);
+        var imgProduct = $('<img/>', {src:pro.image, alt:pro.name});
 
-        pStock.setAttribute("name", stock);
-        pStock.innerText = "Disponible: " + stock + " unidades.";
-        bBuy.setAttribute("type", "submit");
-        bBuy.setAttribute("value", "Comprar");
-        bBuy.setAttribute("name", "comprar");
-
-        divInfo.appendChild(pStock);
-        divInfo.appendChild(bBuy);
-        var imgProduct = document.createElement("img");
-        imgProduct.setAttribute("src", pro.image);
-        imgProduct.setAttribute("alt", pro.name);
-        var divDescrip = document.createElement("div");
-        divDescrip.setAttribute("class", "col-md-9 description");
-        var pDescrip = document.createElement("p");
-        var hDescr = document.createElement("h2");
-        hDescr.innerText = "Descripcion:";
-        pDescrip.innerText = product.description;
-        var global = document.createElement("a");
-        global.setAttribute("href", "#");
-        global.innerText = "Disponibilidad";
-        var ficha = document.createElement("a");
-        ficha.setAttribute("href", "#");
-        ficha.setAttribute("class", "ficha");
-        ficha.innerText = "Ver Ficha";
-        divDescrip.appendChild(hDescr);
-        divDescrip.appendChild(pDescrip);
-        divDescrip.appendChild(global);
-        divDescrip.appendChild(ficha);
-        divImg.appendChild(imgProduct);
-        divRow.appendChild(divImg);
-        divRow.appendChild(divInfo);
-        divRow.appendChild(divDescrip);
-        divProduct.appendChild(divRow);
-        shopContent.appendChild(divProduct);
-        global.addEventListener("click", globalProductPopulate(shop, pro));
-        ficha.addEventListener("click", windowProduct(shop, pro));
+        var divDescrip = $('<div></div>', {class: "col-md-9 description"});
+        var pDescrip = $('<p></p>').text(product.description);
+        var hDescr = $('<h2></h2>').text("Descripcion:");
+        var global = $('<a></a>', {href: "#"}).text("Disponibilidad");
+        var ficha = $('<a></a>', {href: "#", class:"ficha"}).text("Ver ficha");
+        divDescrip.append(hDescr);
+        divDescrip.append(pDescrip);
+        divDescrip.append(global);
+        divDescrip.append(ficha);
+        divImg.append(imgProduct);
+        divRow.append(divImg);
+        divRow.append(divInfo);
+        divRow.append(divDescrip);
+        divProduct.append(divRow);
+        $("#main-content").append(divProduct);
+        global.click(globalProductPopulate(shop, pro));
+        ficha.click(windowProduct(shop, pro));
     }
 }
 function globalProductPopulate(shop, product) {
@@ -1148,7 +988,6 @@ function productCategoryShopPopulate(shop, category) {
         }
     }
 }
-
 var menu = document.getElementById("menu");
 var menuNav = document.createElement("nav");
 menuNav.setAttribute("id", "menuPrincipal");
@@ -1186,6 +1025,11 @@ function shopsMenusPopulate(shop) {
         guardarEstado.setAttribute("class", "pull-right");
         guardarEstado.appendChild(guardar());
         menuUl.appendChild(guardarEstado);
+        var deletProd = document.createElement("li");
+        deletProd.setAttribute("class", "deleteProd pull-right");
+        deletProd.setAttribute("id", "dropProduct");
+        deletProd.appendChild(dropProd());
+        menuUl.appendChild(deletProd);
     }
     var mapLi = document.createElement("li");
     mapLi.appendChild(createMap());
@@ -1196,6 +1040,14 @@ function shopsMenusPopulate(shop) {
     iniA.addEventListener("click", iniPopulate);
 }
 
+function dropProd() {
+    var aDelet = document.createElement("a");
+    var spanDelet = document.createElement("span");
+    spanDelet.setAttribute("class", "glyphicon glyphicon-trash");
+    aDelet.setAttribute("class", "");
+    aDelet.appendChild(spanDelet);
+    return aDelet;
+}
 function createMap() {
     var aMap = document.createElement("a");
     aMap.setAttribute("href", "#");
@@ -1498,5 +1350,5 @@ function clearInputsModalLog() {
 window.setTimeout(function () {
     iniPopulate();
     window.clearTimeout();
-}, 300);
+}, 500);
 
