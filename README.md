@@ -75,3 +75,7 @@ Ejercicio 1 Finalizado
 Practica 10 - Integracion de Componentes 1.7.2
 Ejercicio 1 Finalizado
 Ejercicio 3 Finalizado
+
+Practica 11 - jQuery 1.8.1
+Ejercicio 1 Medio Finalizado
+Ejercicio 2 Finalizado
